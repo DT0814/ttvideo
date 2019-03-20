@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>TTVideo登录</title>
+    <link type="text/css" rel="stylesheet" href="css/login.css">
+    <script type="text/javascript" src="js/jquery-1.12.4.js"></script>
+    <script type="text/javascript" src="js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+    <script type="text/javascript" src="js/axios.js"></script>
+</head>
+<body style="overflow:hidden">
+<div style="margin-top: 40px;height: 70px;padding-left: 300px" class="col-md-3">
+    <img src="images/logo.png"
+         style="width: 153px;height: 52px;">
+    <span id="backIndex" style="float: right;padding-right: 300px;cursor: pointer;padding-top: 40px;color: #107ec4">返回首页</span>
+</div>
+<div class="pagewrap">
+    <div class="main">
+        <div class="header"></div>
+        <div class="content">
+            <div class="con_left"></div>
+            <div class="con_right">
+                <div class="con_r_top">
+                    <a href="javascript:;" class="left"
+                       style="color: rgb(153, 153, 153); border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: rgb(222, 222, 222);">注册</a>
+                    <a href="javascript:;" class="right"
+                       style="color: rgb(51, 51, 51); border-bottom-width: 2px; border-bottom-style: solid; border-bottom-color: rgb(46, 85, 142);">登录管理</a>
+                </div>
+                <ul>
+                    <li class="con_r_left" style="display: none;">
+                        <form id="registerForm" method="post" action="#" autocomplete="off">
+                            <div class="user">
+                                <div><span class="user-icon"></span>
+                                    <input type="text" name="account" id="registerAccount" placeholder="　输入账号" value="">
+                                </div>
+
+                                <div><span class="mima-icon"></span>
+                                    <input type="password" name="pass" id="registerPass" placeholder="　输入密码" value="">
+                                </div>
+                                <div><span class="mima-icon"></span>
+                                    <input type="password" id="registerRePass" placeholder="　重复密码" value="">
+                                </div>
+                                <div><span class="yzmz-icon"></span>
+                                    <input type="text" name="code" placeholder="　验证码" value=""
+                                           style=" width:150px;">　　
+                                    <!--   这里是验证码的相关路径，各位站长自行更换   -->
+                                    <img style="cursor: pointer; margin-top:8px;" alt="看不清？点击更换" id="codeImage1">
+                                    <span>图片点击更换</span>
+                                </div>
+                            </div>
+                            <button id="btn_Register" type="button">注 册</button>
+                        </form>
+                    </li>
+                    <li class="con_r_right" style="display: block;">
+                        <form id="loginForm" method="post" action="#" autocomplete="off">
+                            <div class="user">
+                                <div><span class="user-icon"></span>
+                                    <input type="text" name="account" id="loginAccount" placeholder="　输入账号" value="">
+                                </div>
+
+                                <div><span class="mima-icon"></span>
+                                    <input type="password" name="pass" id="loginPass" placeholder="　输入密码" value="">
+                                </div>
+                                <div><span class="yzmz-icon"></span>
+                                    <input id="vdcode" type="text" name="code" placeholder="　验证码" value=""
+                                           style=" width:150px;">　　
+                                    <!--   这里是验证码的相关路径，各位站长自行更换   -->
+                                    <img style="cursor: pointer; margin-top:8px;" alt="看不清？点击更换" id="codeImage">
+                                    <span>图片点击更换</span>
+                                </div>
+                            </div>
+                            <br>
+                            <button id="btn_Login" type="button">登 录</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

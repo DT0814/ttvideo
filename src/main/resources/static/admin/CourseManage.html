@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link href="../css/custom-styles.css" rel="stylesheet"/>
+    <link href="../css/checkbox3.min.css" rel="stylesheet"/>
+    <link href="../css/pintuer.css" rel="stylesheet">
+    <link href="../css/admin.css" rel="stylesheet">
+    <script src="../js/jquery-1.12.4.js"></script>
+    <script src="../bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <script src="../js/axios.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+    <script src="../js/pintuer.js"></script>
+    <style>
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body>
+<div id="bd" class="container" v-cloak style="width: 100%;background: rgb(237, 237, 237)">
+    <div class="header" style="background: rgb(237, 237, 237);margin: 10px">
+        <h1 class="page-header" style="font-size: 36px">
+            TT Video后台管理系统
+            <small>课程管理</small>
+        </h1>
+    </div>
+    <div class="row" style="background: rgb(237, 237, 237);margin: 10px">
+        <div class="col-md-6 form-inline ">
+            <div class="form-group">
+                <select id="querySelect" class="form-control" style="height: 35px;margin: 0px">
+                    <option value="0" selected>查询全部</option>
+                    <option value="tname">姓名查询</option>
+                </select>
+                <input id="queryInput" class="form-control" style="height: 35px">
+                <span class="btn btn-default " v-on:click="query()">查询</span>
+            </div>
+        </div>
+    </div>
+    <div class="row table-responsive" style="text-align: center;background: rgb(237, 237, 237)">
+        <table class="checkbox-round table table-hover table-responsive table-bordered "
+               style="text-align: center;margin: 20px;width: 97% ;table-layout:fixed">
+            <tr class="row" style="width: 100%">
+                <td width="3%">序号</td>
+                <td width="15%">图片</td>
+                <td width="12%">课程名</td>
+                <td width="10%">教师名</td>
+                <td width="10%">课程分类名</td>
+                <td width="20%">课程介绍</td>
+                <td width="5%">价格</td>
+                <td width="5%">svip价格</td>
+                <td width="5%">是否免费</td>
+                <td width="5%">svip是否免费</td>
+                <td width="5%">点击次数</td>
+                <td width="15%">
+                    <button style="height: 35px;margin: 0px" type="button" class="btn btn-success"
+                            aria-label="Left Align"
+                            v-on:click="addmodal()">
+                        添加课程
+                    </button>
+                </td>
+            </tr>
+            <tr class="row" v-for="(course,index) in courses " v-cloak style="height: 100px">
+                <td>
+                    {{index+1}}
+                </td>
+                <td>
+                    <img style="width: 143px;height: 70px" class="img-rounded" v-bind:src="course.img">
+                </td>
+                <td>{{course.cname}}</td>
+                <td>{{course.tname}}</td>
+                <td>{{course.caname}}</td>
+                <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
+                    {{course.synopsis}}
+                </td>
+                <td>{{course.price}}</td>
+                <td>{{course.sPrice}}</td>
+                <td>{{course.free}}</td>
+                <td>{{course.svipFree}}</td>
+                <td>{{course.clickNum}}</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button class="btn btn-primary " v-on:click="updateModal(course)">修改</button>
+                        <button class="btn btn-danger" v-on:click="deleteCourse(course)">删除</button>
+                        <button class="btn btn-info" v-on:click="showResourcesMange(course)">资源管理</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="row" style="background: rgb(237, 237, 237)">
+        <div class="checkbox col-md-1">
+        </div>
+        <div class="col-md-11" style="text-align: center">
+            <nav aria-label="Page navigation" class="col-md-8">
+                <ul class="pagination">
+                    <li v-if="!pageInfo.firstPage">
+                        <a v-on:click="topage(pageInfo.proPage)" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <template v-for="num in pageInfo.navigatepageNums">
+                        <template v-if="pageInfo.currentNum==num">
+                            <li class="active" v-on:click="topage(num)">
+                                <span>{{num}} <span class="sr-only">(currentNum)</span></span>
+                            </li>
+                        </template>
+                        <template v-else>
+                            <li v-on:click="topage(num)"><span>
+                            <span aria-hidden="true">{{num}}</span>   </span>
+                            </li>
+                        </template>
+                    </template>
+                    <li v-if="!pageInfo.lastPage">
+                        <a v-on:click="topage(pageInfo.nextPage)" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+
+    <!-- 添加展示窗口 -->
+    <div id="addModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button class="close" id="addClose" data-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-title">
+                    <h1 class="text-center">添加</h1>
+                </div>
+                <div class="modal-body" style="overflow:auto">
+                    <form class="form-group" id="addForm">
+                        <div class="form-group">
+                            <label>课程名</label>
+                            <input class="form-control" name="cname"/>
+                        </div>
+                        <div class="form-group">
+                            <label>课程类别</label>
+                            <select class="form-control" name="caid">
+                                <option v-for="catalog in catalogs" v-bind:value="catalog.cid">
+                                    {{catalog.name}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>教师名</label>
+                            <select class="form-control" name="tid">
+                                <option v-for="teacher in teachers" v-bind:value="teacher.tid">
+                                    {{teacher.tname}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>课程简介</label>
+                            <textarea class="form-control" name="synopsis">
+
+                            </textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>价格</label>
+                            <input class="form-control" name="price"/>
+                        </div>
+                        <div class="form-group">
+                            <label>svip价格</label>
+                            <input class="form-control" name="sPrice"/>
+                        </div>
+                        <div class="form-group">
+                            <div class="field">
+                                <div class="report-file">
+                                    <span>点击选择课程图片</span>
+                                    <input tabindex="3" size="3"
+                                           name="file" class="file-prew" type="file"
+                                           onchange="document.getElementById('textName').value=this.value">
+                                </div>
+                                <input type="text" id="textName"
+                                       style="height: 32px;border:1px solid #f1f1f1"/>
+                            </div>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <label>是否免费</label>
+                                <select class="form-control" name="free">
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <label>svip是否免费</label>
+                                <select class="form-control" name="svipFree">
+                                    <option value="1">是</option>
+                                    <option value="0">否</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="text-right">
+                            <span class="btn btn-primary" v-on:click="add">提交</span>
+                            <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 修改展示窗口 -->
+    <div id="updateModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button class="close" data-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-title">
+                    <h1 class="text-center">修改</h1>
+                </div>
+                <div class="modal-body" style="overflow:auto">
+                    <form id="updateForm">
+                        <div class="form-group">
+                            <label>课程名</label>
+                            <input class="form-control" name="cname"/>
+                        </div>
+                        <div class="form-group">
+                            <label>课程类别</label>
+                            <select class="form-control" name="caid">
+                                <template v-for="catalog in catalogs">
+                                    <template v-if="catalog.cid == caid">
+                                        <option v-bind:value="catalog.cid" selected>
+                                            {{catalog.name}}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option v-bind:value="catalog.cid">
+                                            {{catalog.name}}
+                                        </option>
+                                    </template>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>教师名</label>
+                            <select class="form-control" name="tid">
+                                <template v-for="teacher in teachers">
+                                    <template v-if="teacher.tid == tid">
+                                        <option v-bind:value="teacher.tid" selected>
+                                            {{teacher.tname}}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option v-bind:value="teacher.tid">
+                                            {{teacher.tname}}
+                                        </option>
+                                    </template>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>课程简介</label>
+                            <textarea class="form-control" name="synopsis">
+
+                            </textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>价格</label>
+                            <input class="form-control" name="price"/>
+                        </div>
+                        <div class="form-group">
+                            <label>svip价格</label>
+                            <input class="form-control" name="sPrice"/>
+                        </div>
+                        <div class="form-group">
+                            <div class="field">
+                                <div class="report-file">
+                                    <span>点击选择课程图片</span>
+                                    <input tabindex="3" size="3"
+                                           name="file" class="file-prew" type="file"
+                                           onchange="document.getElementById('textName1').value=this.value">
+                                </div>
+                                <input type="text" id="textName1"
+                                       style="height: 32px;border:1px solid #f1f1f1"/>
+                            </div>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <label>是否免费</label>
+                                <select class="form-control" name="free">
+                                </select>
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <label>svip是否免费</label>
+                                <select class="form-control" name="svipFree">
+                                </select>
+                            </label>
+                        </div>
+                        <div class="text-right">
+                            <span class="btn btn-primary" v-on:click="update">提交</span>
+                            <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                        </div>
+                        <input type="hidden" name="cid">
+                        <input type="hidden" name="img">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 查询表单-->
+    <form id="queryForm">
+        <input type="hidden" name="tname">
+    </form>
+
+    <!-- 资源管理窗口 -->
+    <div id="resourceModel" class="modal fade">
+        <div class="modal-dialog" style="width: 1200px;height: 1200px">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button class="close" data-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-title">
+                    <h1 class="text-center">资源</h1>
+                </div>
+                <div class="modal-body" style="overflow:auto">
+                    <table class="checkbox-round table table-hover table-responsive table-bordered "
+                           style="text-align: center;width: 100% ;table-layout:fixed">
+                        <tr class="row" style="width: 100%">
+                            <td width="10%">序号</td>
+                            <td width="20%">资源名</td>
+                            <td width="30%">添加时间</td>
+                            <td width="10%">课件</td>
+                            <td width="10%">顺序</td>
+                            <td width="30%">
+                                <button style="height: 35px;margin: 0px" type="button" class="btn btn-success"
+                                        aria-label="Left Align"
+                                        v-on:click="addResourceModal()">
+                                    添加资源
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="row" v-for="(resource,index) in resources " v-cloak style="height: 100px">
+                            <td>
+                                {{index+1}}
+                            </td>
+                            <td style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis">
+                                {{resource.rname}}
+                            </td>
+                            <td>{{resource.intime}}</td>
+                            <td>
+                                <template v-if="resource.haveCourseware==1">
+                                    <button class="btn btn-danger" v-on:click="deleteResource(resource)">删除</button>
+                                </template>
+                                <template v-else>
+                                    暂无资源
+                                </template>
+                            </td>
+                            <td>{{resource.rank}}</td>
+                            <td>
+                                <div class="btn-group" role="group" aria-label="...">
+                                    <button class="btn btn-primary " v-on:click="updateResourceModal(resource)">修改
+                                    </button>
+                                    <button class="btn btn-danger" v-on:click="deleteResource(resource)">删除</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 添加资源窗口 -->
+    <div id="addResourceModal" class="modal fade" style="z-index: 10000">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button class="close" data-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-title">
+                    <h1 class="text-center">添加</h1>
+                </div>
+                <div class="modal-body" style="overflow:auto">
+                    <form class="form-group" id="addResourceForm">
+                        <input class="form-control" name="cid" type="hidden"/>
+                        <div class="form-group">
+                            <label>资源名</label>
+                            <input class="form-control" name="rname"/>
+                        </div>
+                        <div class="form-group">
+                            <label>顺序</label>
+                            <input class="form-control" name="rank"/>
+                        </div>
+                        <div class="form-group">
+                            <div class="field">
+                                <div class="report-file">
+                                    <span>点击选择课程视频</span>
+                                    <input tabindex="3" size="3"
+                                           name="resourceFile" class="file-prew" type="file"
+                                           onchange="document.getElementById('textName3').value=this.value">
+                                </div>
+                                <input type="text" id="textName3"
+                                       style="height: 32px;border:1px solid #f1f1f1"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="field">
+                                <div class="report-file">
+                                    <span>点击选择课件</span>
+                                    <input tabindex="3" size="3"
+                                           name="coursewareFile" class="file-prew" type="file"
+                                           onchange="document.getElementById('textName4').value=this.value">
+                                </div>
+                                <input type="text" id="textName4"
+                                       style="height: 32px;border:1px solid #f1f1f1"/>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="btn btn-primary" v-on:click="addResource()">提交</span>
+                            <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 修改资源窗口 -->
+    <div id="updateResourceModal" class="modal fade" style="z-index: 10000">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button class="close" data-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-title">
+                    <h1 class="text-center">修改</h1>
+                </div>
+                <div class="modal-body" style="overflow:auto">
+                    <form class="form-group" id="updateResourceForm">
+                        <input class="form-control" name="rid" type="hidden"/>
+                        <input class="form-control" name="url" type="hidden"/>
+                        <input class="form-control" name="coursewareUrl" type="hidden"/>
+                        <div class="form-group">
+                            <label>资源名</label>
+                            <input class="form-control" name="rname"/>
+                        </div>
+                        <div class="form-group">
+                            <label>顺序</label>
+                            <input class="form-control" name="rank"/>
+                        </div>
+                        <div class="form-group">
+                            <div class="field">
+                                <div class="report-file">
+                                    <span>点击选择课程视频</span>
+                                    <input tabindex="3" size="3"
+                                           name="resourceFile" class="file-prew" type="file"
+                                           onchange="document.getElementById('textName5').value=this.value">
+                                </div>
+                                <input type="text" id="textName5"
+                                       style="height: 32px;border:1px solid #f1f1f1"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="field">
+                                <div class="report-file">
+                                    <span>点击选择课件</span>
+                                    <input tabindex="3" size="3"
+                                           name="coursewareFile" class="file-prew" type="file"
+                                           onchange="document.getElementById('textName6').value=this.value">
+                                </div>
+                                <input type="text" id="textName6"
+                                       style="height: 32px;border:1px solid #f1f1f1"/>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="btn btn-primary" v-on:click="updateResource()">提交</span>
+                            <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var vu = new Vue({
+            el: "#bd",
+            data: {
+                pageInfo: {},
+                courses: {},
+                admin: {},
+                num: {},
+                nums: "",
+                modals: "",
+                catalogs: {},
+                teachers: {},
+                caid: {},
+                tid: {},
+                resources: {},
+                cid: {},
+            },
+            mounted() {
+                axios.get('../admin/findByAid?aid=' + $.cookie('admin_aid'))
+                    .then(function (response) {
+                        var data = response.data;
+                        if (data.code == 200) {
+                            vu.admin = data.data;
+                        } else {
+                            $.cookie('admin_aname', null, {expires: -1, path: '/'});
+                            $.cookie('admin_type', null, {expires: -1, path: '/'});
+                            $.cookie('admin_aid', null, {expires: -1, path: '/'});
+                            $.cookie('admin_isLogin', null, {expires: -1, path: '/'});
+                            location.href = "./index.html";
+                        }
+                    });
+                this.$options.methods.topage(1);
+                setTimeout(function () {
+                    $("#checkAllInput").prop("checked", false);
+                }, 500);
+            },
+            methods: {
+                updateModal: function (course) {
+                    vu.caid = course.caid;
+                    vu.tid = course.tid;
+                    axios.get('../catalog/find')
+                        .then(function (response) {
+                            vu.catalogs = response.data.data;
+                        });
+                    axios.get('../teacher/findAll?selectAll=1')
+                        .then(function (response) {
+                            vu.teachers = response.data.data;
+
+                        });
+                    console.log(course);
+                    $("#updateForm").find("input[name='cname']").val(course.cname);
+                    $("#updateForm").find("input[name='cid']").val(course.cid);
+                    $("#updateForm").find("input[name='caid']").val(course.caid);
+                    $("#updateForm").find("input[name='caname']").val(course.caname);
+                    $("#updateForm").find("input[name='tid']").val(course.tid);
+                    $("#updateForm").find("input[name='tname']").val(course.tname);
+                    $("#updateForm").find("textarea[name='synopsis']").val(course.synopsis);
+                    $("#updateForm").find("input[name='price']").val(course.price);
+                    $("#updateForm").find("input[name='sPrice']").val(course.sPrice);
+                    $("#updateForm").find("input[name='img']").val(course.img);
+                    var selectFree = $("#updateForm").find("select[name='free']");
+                    selectFree.html("");
+                    var op = $("<option value='1'>" + "是" + "</option>")
+                    if (course.free == 1) {
+                        op.attr("selected", "selected");
+                    }
+                    selectFree.append(op);
+                    op = $("<option value='0'>" + "否" + "</option>")
+                    if (course.free == 0) {
+                        op.attr("selected", "selected");
+                    }
+                    selectFree.append(op);
+                    var selectSvipFree = $("#updateForm").find("select[name='svipFree']");
+                    selectSvipFree.html("");
+                    op = $("<option value='1'>" + "是" + "</option>")
+                    if (course.svipFree == 1) {
+                        op.attr("selected", "selected");
+                    }
+                    selectSvipFree.append(op);
+                    op = $("<option value='0'>" + "否" + "</option>")
+                    if (course.svipFree == 0) {
+                        op.attr("selected", "selected");
+                    }
+                    selectSvipFree.append(op);
+                    $("#updateModal").modal();
+
+                },
+                update: function () {
+                    $(".modal-body").scrollTop(0);
+                    var formData = new FormData($("#updateForm")[0]);
+                    axios.post('/course/update', formData)
+                        .then(function (response) {
+                            var result = response.data;
+                            if (result.code == 200) {
+                                alert("更新成功");
+                                $("#updateModal").modal("hide");
+                                vu.$options.methods.topage(vu.pageInfo.currentNum);
+                            } else {
+                                alert(result.msg);
+                                $("#updateModal").modal("hide");
+                            }
+                        });
+                },
+                addmodal: function () {
+                    axios.get('../catalog/find')
+                        .then(function (response) {
+                            vu.catalogs = response.data.data;
+                        });
+                    axios.get('../teacher/findAll?selectAll=1')
+                        .then(function (response) {
+                            vu.teachers = response.data.data;
+                        });
+                    $("#addModal").modal();
+                },
+                addResourceModal: function () {
+                    $("#addResourceModal").modal();
+                },
+                add: function () {
+                    $(".modal-body").scrollTop(0);
+                    var formData = new FormData($("#addForm")[0]);
+                    axios.post('../course/add', formData)
+                        .then(function (response) {
+                            var result = response.data;
+                            if (result.code == 200) {
+                                alert("添加成功");
+                                $("#addModal").modal("hide");
+                                vu.$options.methods.topage(1);
+                            } else {
+                                alert(result.msg);
+                            }
+                        });
+                    vu.$options.methods.topage(1);
+                },
+                topage: function (page) {
+                    console.log("到第" + page)
+                    var str = "";
+                    $("#queryForm").find('input').each(function () {
+                        if ($.trim($(this).val()) != "") {
+                            str += $.trim($(this).attr("name")) + "=" + $.trim($(this).val());
+                        }
+                    });
+                    axios.get('../course/findAll?page=' + page + "&" + str)
+                        .then(function (response) {
+                            var result = response.data;
+                            vu.pageInfo = result.data;
+                            vu.courses = vu.pageInfo.data;
+                        });
+                },
+                deleteCourse: function (course) {
+                    if (confirm("您确定要删除吗?")) {
+                        let data = new FormData();
+                        data.append('cid', course.cid);
+                        data.append('img', course.img);
+                        axios.post('../course/delete', data).then(function (response) {
+                            var data = response.data;
+                            if (data.code == 200) {
+                                alert("删除成功");
+                                vu.$options.methods.topage(vu.pageInfo.currentNum);
+                            } else {
+                                alert("删除失败");
+                            }
+                        })
+                    }
+                },
+                emptyFrom: function (ele) {
+                    $.each(ele, function () {
+                        $(this).val("");
+                    })
+                },
+                query: function () {
+                    $("#queryForm").find('input').each(function () {
+                        $(this).val("");
+                    });
+                    var select = $("#querySelect").val();
+                    var inputValue = $("#queryInput").val();
+                    $("#queryForm").find("input[name='" + select + "']").val(inputValue);
+                    vu.$options.methods.topage(1);
+                },
+                showResourcesMange: function (course) {
+                    axios.get('../resource/findByCid?cid=' + course.cid)
+                        .then(function (response) {
+                            vu.resources = response.data.data;
+                        });
+                    $("#addResourceForm").find("input[name='cid']").val(course.cid);
+                    $("#resourceModel").modal({backdrop: 'static', keyboard: false});
+                    vu.cid = course.cid;
+                },
+                updateResourceModal: function (resource) {
+                    $("#updateResourceForm").find("input[name='rname']").val(resource.rname);
+                    $("#updateResourceForm").find("input[name='rank']").val(resource.rank);
+                    $("#updateResourceForm").find("input[name='rid']").val(resource.rid);
+                    $("#updateResourceForm").find("input[name='coursewareUrl']").val(resource.coursewareUrl);
+                    $("#updateResourceForm").find("input[name='url']").val(resource.url);
+                    $("#updateResourceModal").modal({backdrop: 'static', keyboard: false});
+                },
+                addResource: function () {
+                    var formData = new FormData($("#addResourceForm")[0]);
+                    axios.post('../resource/add', formData)
+                        .then(function (response) {
+                            var result = response.data;
+                            if (result.code == 200) {
+                                axios.get('../resource/findByCid?cid=' + vu.cid)
+                                    .then(function (response) {
+                                        vu.resources = response.data.data;
+                                    });
+                                alert("添加成功");
+                                $("#addResourceModal").modal("hide");
+                            } else {
+                                alert(result.msg);
+                            }
+                        });
+                },
+                updateResource: function () {
+                    var formData = new FormData($("#updateResourceForm")[0]);
+                    axios.post('/resource/update', formData)
+                        .then(function (response) {
+                            var result = response.data;
+                            if (result.code == 200) {
+                                alert("更新成功");
+                                $("#updateResourceModal").modal("hide");
+                                axios.get('../resource/findByCid?cid=' + vu.cid)
+                                    .then(function (response) {
+                                        vu.resources = response.data.data;
+                                    });
+                            } else {
+                                alert(result.msg);
+                                $("#updateResourceModal").modal("hide");
+                            }
+                        });
+                }
+            }
+
+        })
+    ;
+</script>
+</body>
+</html>

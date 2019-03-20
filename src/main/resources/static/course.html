@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/video-js.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/course_video.css">
+    <meta charset="UTF-8">
+    <title>TTVideo</title>
+
+</head>
+<body>
+<iframe src="title.html" width="100%" height="150px" style="border: none"></iframe>
+<div style="background-color: #0f0f0f;height: 350px;" class="row">
+    <div class="container">
+        <div class="row" style="height: 500px">
+            <div class="col-md-6" style="height: 350px">
+                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto"
+                       poster="./images/asd.jpg" data-setup="{}" style="width: 100%;height: 100%;">
+                </video>
+            </div>
+            <div class="col-md-6" style="height: 300px;margin-top: 50px">
+                <p style="font-size: 18px;color: #fff;word-break: break-all;" id="cname">
+                </p>
+                <div class="view_price" style="text-align: left">
+                    价格:
+                    <spen style=" font-size: 24px;color: #d51423;ont-weight: 700;margin-left: 20px;" id="price">
+                        ￥399.00
+                    </spen>
+                    <div style="margin-top: 10px">
+                        svip:
+                        <spen style=" font-size: 18px;color: #d51423;ont-weight: 700;margin-left: 20px;" id="svipPrice">
+                            ￥399.00
+                        </spen>
+                        <a href="/vip" class="set_vip">立即开通 &gt;</a>
+                    </div>
+                </div>
+                <span style=" font-size: 18px;pxont-weight: 700;color: #666">讲师:</span>
+                <spen style=" font-size: 18px;pxont-weight: 700;margin-left: 20px;color: #666" id="tname">
+                </spen>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="background-color: #f5f5f5">
+    <div id="bd" class="container">
+        <div class="row" style="width: 1200px">
+            <div class="col-md-9">
+                <div style="height: 66px;background-color: #fff;border-radius: 8px;">
+                    <ul class="courseMenu" style="text-align: center">
+                        <li class="now">课程介绍</li>
+                        <li>录播课程</li>
+                    </ul>
+                </div>
+                <div style="background-color: #fff;margin-top: 20px;border-radius: 8px;min-height: 800px;padding: 20px">
+                    {{course.synopsis}}
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px;border-radius: 8px;min-height: 800px">
+                <div style="background-color: #fff;border-radius: 8px;padding: 20px">
+                    讲师简介
+                    <hr>
+                    {{teacher.introduce}}
+                </div>
+                <div style="background-color: #fff;margin-top: 20px;border-radius: 8px;padding-top:20px;text-align: center">
+                    <div>
+                        <span style="margin-left: 20px;font-size: 16px;font-weight: 700;">课程推荐</span>
+                    </div>
+                    <div class="shadow" v-for="course in courses" v-on:click="toCourse(course.cid)">
+                        <img v-bind:src="course.img" width="120px" height="60px" style="border-radius: 4px;float: left">
+                        <div style="height: 60px">
+                            <p>
+                                {{course.cname}}
+                            </p>
+                            <div style="height: 46px">
+                                <span style="font-size: 12px;color: #d51423;">
+                                    <template v-if="course.free ==1 ">
+                                      免费<br>
+                                    </template>
+                                    <template v-else>
+                                        ￥{{course.price}}<br>
+                                         <span style="font-size: 12px;padding-left: 10px;">
+                                             <template v-if="course.svipFree == 1">
+                                                 SVIP免费
+                                             </template>
+                                             <template v-else>
+                                                 SVIP:￥{{course.sPrice}}
+                                             </template>
+                                         </span>
+                                    </template>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/video.min.js"></script>
+<script src="js/jquery-1.12.4.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/jquery.gallery.js"></script>
+<script src="js/vue.js"></script>
+<script src="js/axios.js"></script>
+<script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+<script type="text/javascript">
+    videojs.addLanguage('zh-CN', {
+        "Play": "播放",
+        "Pause": "暂停",
+        "Current Time": "当前时间",
+        "Duration": "时长",
+        "Remaining Time": "剩余时间",
+        "Stream Type": "媒体流类型",
+        "LIVE": "直播",
+        "Loaded": "加载完毕",
+        "Progress": "进度",
+        "Fullscreen": "全屏",
+        "Non-Fullscreen": "退出全屏",
+        "Mute": "静音",
+        "Unmute": "取消静音",
+        "Playback Rate": "播放速度",
+        "Subtitles": "字幕",
+        "subtitles off": "关闭字幕",
+        "Captions": "内嵌字幕",
+        "captions off": "关闭内嵌字幕",
+        "Chapters": "节目段落",
+        "Close Modal Dialog": "关闭弹窗",
+        "Descriptions": "描述",
+        "descriptions off": "关闭描述",
+        "Audio Track": "音轨",
+        "You aborted the media playback": "视频播放被终止",
+        "A network error caused the media download to fail part-way.": "网络错误导致视频下载中途失败。",
+        "The media could not be loaded, either because the server or network failed or because the format is not supported.": "视频因格式不支持或者服务器或网络的问题无法加载。",
+        "The media playback was aborted due to a corruption problem or because the media used features your browser did not support.": "由于视频文件损坏或是该视频使用了你的浏览器不支持的功能，播放终止。",
+        "No compatible source was found for this media.": "无法找到此视频兼容的源。",
+        "The media is encrypted and we do not have the keys to decrypt it.": "视频已加密，无法解密。",
+        "Play Video": "播放视频",
+        "Close": "关闭",
+        "Modal Window": "弹窗",
+        "This is a modal window": "这是一个弹窗",
+        "This modal can be closed by pressing the Escape key or activating the close button.": "可以按ESC按键或启用关闭按钮来关闭此弹窗。",
+        ", opens captions settings dialog": ", 开启标题设置弹窗",
+        ", opens subtitles settings dialog": ", 开启字幕设置弹窗",
+        ", opens descriptions settings dialog": ", 开启描述设置弹窗",
+        ", selected": ", 选择",
+        "captions settings": "字幕设定",
+        "Audio Player": "音频播放器",
+        "Video Player": "视频播放器",
+        "Replay": "重播",
+        "Progress Bar": "进度小节",
+        "Volume Level": "音量",
+        "subtitles settings": "字幕设定",
+        "descriptions settings": "描述设定",
+        "Text": "文字",
+        "White": "白",
+        "Black": "黑",
+        "Red": "红",
+        "Green": "绿",
+        "Blue": "蓝",
+        "Yellow": "黄",
+        "Magenta": "紫红",
+        "Cyan": "青",
+        "Background": "背景",
+        "Window": "视窗",
+        "Transparent": "透明",
+        "Semi-Transparent": "半透明",
+        "Opaque": "不透明",
+        "Font Size": "字体尺寸",
+        "Text Edge Style": "字体边缘样式",
+        "None": "无",
+        "Raised": "浮雕",
+        "Depressed": "压低",
+        "Uniform": "均匀",
+        "Dropshadow": "下阴影",
+        "Font Family": "字体库",
+        "Proportional Sans-Serif": "比例无细体",
+        "Monospace Sans-Serif": "单间隔无细体",
+        "Proportional Serif": "比例细体",
+        "Monospace Serif": "单间隔细体",
+        "Casual": "舒适",
+        "Script": "手写体",
+        "Small Caps": "小型大写字体",
+        "Reset": "重启",
+        "restore all settings to the default values": "恢复全部设定至预设值",
+        "Done": "完成",
+        "Caption Settings Dialog": "字幕设定视窗",
+        "Beginning of dialog window. Escape will cancel and close the window.": "开始对话视窗。离开会取消及关闭视窗",
+        "End of dialog window.": "结束对话视窗"
+    });
+    var player = videojs('my-video');
+    videojs("my-video").ready(function () {
+        player.src("ckin.mp4");
+        player.load();
+    });
+    var vu = new Vue({
+        el: "#bd",
+        data: {
+            courses: {},
+            course: {},
+            teacher: {},
+        },
+        mounted() {
+            axios.get('/course/findCourseByCid' + document.location.search).then(function (response) {
+                var data = response.data;
+                console.log(data.data)
+                vu.course = data.data;
+                $("#cname").html(vu.course.cname);
+                if (vu.course.free) {
+                    $("#price").html("免费");
+                } else {
+                    $("#price").html(vu.course.price + ".00");
+                    if (vu.course.svipFree) {
+                        $("#svipPrice").html("免费");
+                    } else {
+                        $("#svipPrice").html(vu.course.sPrice + ".00");
+                    }
+                }
+                $("#tname").html(vu.course.tname);
+                $(".vjs-poster").attr("style", "background-image: url(" + vu.course.img + ")");
+                axios.get('/teacher/findByTid?tid=' + vu.course.tid)
+                    .then(function (response) {
+                        vu.teacher = response.data.data;
+                    })
+            });
+            axios.get('/course/recommend?uid=' + $.cookie("user_uid"))
+                .then(function (response) {
+                    vu.courses = response.data.data;
+                });
+
+        },
+        methods: {
+            play: function () {
+                var curtime = player.currentTime();
+                player.src("./ckin.mp4");
+                player.load();
+                player.currentTime(curtime);
+                player.play();
+            },
+            toCourse: function (cid) {
+                window.open('/course.html?cid=' + cid)
+            }
+        }
+    });
+</script>
+</body>
+</html>

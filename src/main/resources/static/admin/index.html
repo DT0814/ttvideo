@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1">
+    <meta content=always name=referrer>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="renderer" content="webkit">
+    <title>管理</title>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../css/pintuer.css">
+    <link href="../css/font-awesome.css" rel="stylesheet"/>
+    <link href="../css/custom-styles.css" rel="stylesheet"/>
+    <script type="text/javascript" src="../js/jquery-1.12.4.js"></script>
+    <script type="text/javascript" src="../js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+</head>
+<style>
+    .textDiv {
+        display: -moz-box;
+        display: -webkit-box;
+        -moz-box-align: center;
+        -webkit-box-align: center;
+        -moz-box-pack: center;
+        -webkit-box-pack: center;
+    }
+</style>
+<body>
+<div style="width: 100%">
+    <div class="navbar-header textDiv" style="width: 13%;height:8%;background: #F36A5A;color: #f1f1f1">
+        <strong id="admin_aname" style="font-size: 23px"></strong>
+    </div>
+    <div class="navbar-header" style="width: 87%;height:8%;background: #e5e5e5">
+
+    </div>
+    <div style="background:#1f2837;height: 92%;width: 13%;float: left">
+        <div class="sidebar-collapse" style="width: 100%;margin: 10px;margin-top: 30px;">
+            <ul class="nav navbar-top-links navbar-left" style="width: 90%">
+                <li><a style="font-size: 20px;margin: 5px" class="active-menu"
+                       href="AdminManage.html"
+                       target="right">管理员管理</a>
+                </li>
+                <li><a style="font-size: 20px;margin: 5px"
+                       href="TeacherManage.html"
+                       target="right">教师管理</a>
+                </li>
+                <li><a style="font-size: 20px;margin: 5px"
+                       href="CourseManage.html"
+                       target="right">课程管理</a>
+                </li>
+                <li>
+                    <a style="font-size: 20px;margin: 5px"
+                       onclick="update();"
+                       target="right">修改密码</a>
+                </li>
+                <li><a style="font-size: 20px;margin: 5px"
+                       onclick="loginOut();"
+                       target="right">注销</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div style="width: 87%;text-align: center;float: left">
+        <iframe scrolling="auto" rameborder="0"
+                src="AdminManage.html"
+                name="right" style="width: 100%;height: 92%"></iframe>
+    </div>
+</div>
+<!-- 密码修改 -->
+<div id="updatePassModal" class="modal fade">
+    <div class="modal-dialog" style="width: 500px">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="close" data-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-title">
+                <h1 class="text-center">密码修改</h1>
+            </div>
+            <div class="modal-body">
+                <form class="form-group" id="updateFrom">
+                    <div class="form-group">
+                        <label>旧密码</label>
+                        <input class="form-control" name="pass" type="password">
+                    </div>
+                    <div class="form-group">
+                        <label>新密码</label>
+                        <input class="form-control" name="newPass" type="password">
+                    </div>
+                    <div class="form-group">
+                        <label>确认输入新密码</label>
+                        <input class="form-control" name="tesNewPass" type="password">
+                    </div>
+                </form>
+                <div class="form-group text-center">
+                    <button id="rePassBut" style="width: 100px;" class="btn btn-lg btn-primary"
+                            onclick="rePass()">修改密码
+                    </button>
+                    <input id="str" value="rePassBut" type="hidden">
+                </div>
+                <div class="text-right">
+                    <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        if ($.trim($.cookie('admin_isLogin')) == $.trim("true")) {
+            $("#admin_aname").text($.cookie('admin_aname'));
+        } else {
+            location.href = "./login.html";
+        }
+        $(".nav li a").click(function () {
+            $(".nav li a").removeClass("active-menu");
+            $(this).addClass("active-menu");
+        })
+    });
+
+    function loginOut() {
+        if (confirm("您确定注销么?")) {
+            $.cookie('admin_aname', null, {expires: -1, path: '/'});
+            $.cookie('admin_uid', null, {expires: -1, path: '/'});
+            $.cookie('admin_isLogin', null, {expires: -1, path: '/'});
+            $.cookie('admin_type', null, {expires: -1, path: '/'});
+            alert("注销成功 !");
+            location.href = "./login.html";
+        }
+    }
+
+    function update() {
+        $("#updatePassModal").modal();
+    }
+
+    function rePass() {
+        $(".ErrorSpan").remove();
+        var pass = $("#updateFrom").find("input[name='pass']");
+        if ($.trim(pass.val()) == "") {
+            pass.after($("<span class='ErrorSpan' style='color: #d43f3a'>旧密码不能为空</span>"));
+            $(".modal-body").scrollTop(0);
+            return;
+        }
+        var newPass = $("#updateFrom").find("input[name='newPass']");
+        if ($.trim(newPass.val()) == "") {
+            newPass.after($("<span class='ErrorSpan' style='color: #d43f3a'>新密码不能为空</span>"));
+            $(".modal-body").scrollTop(0);
+            return;
+        }
+        var tesNewPass = $("#updateFrom").find("input[name='tesNewPass']");
+        if ($.trim(tesNewPass.val()) == "") {
+            tesNewPass.after($("<span class='ErrorSpan' style='color: #d43f3a'>重复密码不能为空</span>"));
+            $(".modal-body").scrollTop(0);
+            return;
+        }
+        var newPass = $("#updateFrom").find("input[name=newPass]").val();
+        var tesNewPasss = $("#updateFrom").find("input[name=tesNewPass]").val();
+        if (newPass != tesNewPasss) {
+            var tesNewPasss = $("#updateFrom").find("input[name=tesNewPass]").after($("<span class='ErrorSpan' style='color: #d43f3a'>两次输入密码不一致</span>"))
+        } else {
+            $(".ErrorSpan").remove();
+            if (confirm("您确定要修改密码么?")) {
+                $.ajax({
+                    type: "post",
+                    url: "${APP_PATH}/user/updatePass.action",
+                    data: {
+                        "newPass": $("#updateFrom").find("input[name=newPass]").val(),
+                        "pass": $("#updateFrom").find("input[name=pass]").val(),
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert("密码修改成功请点击确定后重新登陆");
+                            $.cookie('admin_aname', null, {expires: -1, path: '/'});
+                            $.cookie('admin_type', null, {expires: -1, path: '/'});
+                            $.cookie('admin_aid', null, {expires: -1, path: '/'});
+                            $.cookie('admin_isLogin', null, {expires: -1, path: '/'});
+                            location.href = "./index.html";
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            }
+        }
+    }
+</script>
+<div style="text-align:center;"></div>
+</body>
+</html>

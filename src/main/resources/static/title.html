@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/index.css" type="text/css">
+    <script src="js/jquery-1.12.4.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/jquery.gallery.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <meta charset="UTF-8">
+    <title>TTVideo</title>
+</head>
+<body>
+
+<div id="topMenu" class="navigation container" style="height: 140px;width: 100%;">
+    <div class="row loginRegister"
+         style="height: 30px;background-color: #333333;text-align: right;padding-right: 400px;padding-top: 5px">
+        <template v-if="isLogin">
+            <spen v-on:click="toPersonal();" style="color: #ccc;cursor:pointer">个人中心</spen>
+            <spen style="color:#ccc">丨</spen>
+            <spen v-on:click="toPersonal();" style="color: #ccc;cursor:pointer">{{user_name}}</spen>
+            <template v-if="user_svip === 'true'">
+                <spen style="color: red">svip</spen>
+            </template>
+            <spen v-on:click="loginOut();" style="color: #ccc;margin-left: 10px;cursor:pointer">退出</spen>
+        </template>
+        <template v-else>
+            <spen v-on:click="toLogin();" style="color: #ccc;cursor:pointer">登录</spen>
+            <spen v-on:click="toLogin();" style="color: #ccc;margin-left: 10px;cursor:pointer">注册</spen>
+        </template>
+    </div>
+    <div style="margin:0 auto;height: 110px;width: 100%;background-color: #fff; position: relative" class="row">
+        <div style="width: 1200px;  position: absolute;margin:auto; top: 0;left: 0;right: 0;bottom: 0">
+            <div class="col-md-3">
+                <img src="images/logo.png" style="width: 153px;height: 52px;margin-top: 40px;margin-left: 70px">
+            </div>
+            <ul class="col-md-5 menu" style="margin-top: 55px;">
+                <li v-on:click="toIndex()" style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">首页</li>
+                <li v-on:click="toCourse()" style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">课程中心
+                </li>
+                <li style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">SVIP会员</li>
+                <li style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">讲师招募</li>
+            </ul>
+            <div class="row col-md-3" style="margin-top: 55px;">
+                <input id="cname" type="text" class="col-md-10" placeholder="请输入搜索内容"
+                       style="border:none;font-size: 16px;height: 32px">
+                <div v-on:click="select()" class="col-md-1" style="width: 32px;height: 32px;cursor:pointer;">
+                    <img src="images/sousuo.png" style="margin-top:8px;width: 16px;height: 16px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    var menuVu = new Vue({
+        el: "#topMenu",
+        data: {
+            isLogin: false,
+            user_name: {},
+            user_svip: {},
+            user_uid: {},
+        },
+        mounted() {
+            if ($.cookie("user_name") != '' && $.cookie("user_name") != null) {
+                this.isLogin = true;
+                this.user_name = $.cookie("user_name");
+                this.user_svip = $.cookie("user_svip");
+                this.user_uid = $.cookie("user_uid");
+            }
+            $(".loginRegister spen").hover(function () {
+                this.style.color = "#FFF";
+            }, function () {
+                this.style.color = "#ccc";
+            })
+        },
+        methods: {
+            toLogin: function () {
+                /*location.href = "/login.html";*/
+                window.open('/login.html', '_blank')
+            },
+            loginOut: function () {
+                if (confirm("您确定退出登录么?")) {
+                    $.cookie('user_name', null, {expires: -1, path: '/'});
+                    $.cookie('user_uid', null, {expires: -1, path: '/'});
+                    $.cookie('user_svip', null, {expires: -1, path: '/'});
+                    alert("注销成功 !");
+                    location.href = "/index.html";
+                }
+            },
+            toPersonal: function () {
+                window.open('/personal.html', '_top');
+            },
+            toIndex: function () {
+                window.open('/index.html', '_top');
+            },
+            toCourse: function () {
+                window.open('/courseSearch.html', '_top');
+            },
+            select: function () {
+                window.open('/courseSearch.html?cname=' + $("#cname").val(), '_top')
+            }
+        },
+    });
+</script>
+</html>

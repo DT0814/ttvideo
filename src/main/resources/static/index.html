@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/index.css" type="text/css">
+    <script src="js/jquery-1.12.4.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/jquery.gallery.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <meta charset="UTF-8">
+    <title>TTVideo</title>
+</head>
+<body style="background-color: #F8F8FF  ">
+<iframe src="title.html" width="100%" height="150px" style="border: none"></iframe>
+<div class="container" id="index" style="width: 1300px;">
+    <div class="carousel">
+        <img src="images/a.jpg" class="chart" alt="0">
+        <img src="images/b.jpg" class="chart" alt="1">
+        <img src="images/c.jpg" class="chart" alt="2">
+        <div class="point">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div id="leftMenu">
+            <div class="lside">
+                <ul>
+                    <li v-for="catalog in catalogs" @mouseenter="enter(catalog)">
+                        <a href="#">{{catalog.name}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div @mouseleave="type()" class="js-nav" id="catalogShow" style="padding:5px;">
+                <div>
+                    <span style="margin-left: 20px;font-size: 16px;font-weight: 700;">课程推荐</span>
+                </div>
+                <div class="shadow" v-for="course in courses"
+                     style="width: 180px;margin-top: 15px;margin-left:8px;height: 150px;background-color: #fff"
+                     v-on:click="toCourse(course.cid)">
+                    <img v-bind:src="course.img" width="180px" height="88px" style="border-radius: 4px;float: left">
+                    <div style="height: 53px;padding: 5px">
+                        <p style="width:180px;font-size: 12px;height:15px;overflow: hidden;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;word-break: break-all;">
+                            {{course.cname}}
+                        </p>
+                        <div>
+                            <span style="font-size: 12px;">
+                                <template v-if="course.free ==1 ">
+                                  免费
+                                </template>
+                                <template v-else>
+                                    ￥{{course.price}}
+                                     <span style="font-size: 12px;padding-left: 10px;">
+                                         <template v-if="course.svipFree == 1">
+                                             SVIP免费
+                                         </template>
+                                         <template v-else>
+                                             SVIP:￥{{course.sPrice}}
+                                         </template>
+                                     </span>
+                                </template>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="position: static">
+        <div style="margin-top: 450px;font-size: 24px;margin-left: 50px;">
+            <span class="col_block"></span>
+            &nbsp;&nbsp;精品课程
+        </div>
+        <div class="course" style="margin-top: 10px;margin-left: 30px;background-color: #f5f5f5">
+            <div class="shadow" v-for="course in ExcellentCourse"
+                 style="width: 285px;height: 204px;margin: 10px;float: left;background-color: #fff"
+                 v-on:click="toCourse(course.cid)">
+                <img style="border-radius: 6px 6px 0 0;width: 285px;height: 140px" v-bind:src="course.img">
+                <div style="width: 285px;height: 204px">
+                    <p style="font-size: 16px;margin-top: 5px;padding-left: 10px;overflow: hidden;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;word-break: break-all;">
+                        {{course.cname}}
+                    </p>
+                    <span style="font-size: 16px;bottom: 10px;padding-left: 10px;color: red;">
+                    <template v-if="course.free ==1 ">
+                        免费
+                    </template>
+                    <template v-else>
+                        ￥{{course.price}}
+                         <span style="font-size: 12px;padding-left: 10px;">
+                             <template v-if="course.svipFree == 1">
+                                 SVIP免费
+                             </template>
+                             <template v-else>
+                                 SVIP:￥{{course.sPrice}}
+                             </template>
+                         </span>
+                    </template>
+                </span>
+                </div>
+            </div>
+        </div>
+        <hr style="margin-top: 480px;font-size: 24px;margin-left: 40px;">
+        <div style="margin-top: 430px;font-size: 24px;margin-left: 40px;">
+            <span class="col_block"></span>
+            &nbsp;&nbsp;最新课程
+        </div>
+        <div class="course" style="margin-top: 10px;margin-left: 30px;background-color: #f5f5f5">
+            <div class="shadow" v-for="course in newCourse" v-on:click="toCourse(course.cid)"
+                 style="width: 285px;height: 204px;margin: 10px;float: left;background-color: #fff">
+                <img style="border-radius: 6px 6px 0 0;width: 285px;height: 140px" v-bind:src="course.img">
+                <div style="width: 285px;height: 204px">
+                    <p style="font-size: 16px;margin-top: 5px;padding-left: 10px;overflow: hidden;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;word-break: break-all;">
+                        {{course.cname}}
+                    </p>
+                    <span style="font-size: 16px;bottom: 10px;padding-left: 10px;color: red;">
+                    <template v-if="course.free ==1 ">
+                        免费
+                    </template>
+                    <template v-else>
+                        ￥{{course.price}}
+                         <span style="font-size: 12px;padding-left: 10px;">
+                             <template v-if="course.svipFree == 1">
+                                 SVIP免费
+                             </template>
+                             <template v-else>
+                                 SVIP:￥{{course.sPrice}}
+                             </template>
+                         </span>
+                    </template>
+                </span>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="loginModal" class="modal fade">
+            <div class="modal-dialog" style="width: 800px">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button class="close" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-remove"/>
+                        </button>
+                    </div>
+                    <div class="modal-title">
+                        <h1 class="text-center">登录</h1>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="registerModal" class="modal fade">
+            <div class="modal-dialog" style="width: 800px">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button class="close" data-dismiss="modal">
+                            <span class="glyphicon glyphicon-remove"/>
+                        </button>
+                    </div>
+                    <div class="modal-title">
+                        <h1 class="text-center">注册</h1>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script>
+    var vu = new Vue({
+            el: "#index",
+            data: {
+                catalogs: {},
+                ExcellentCourse: {},
+                newCourse: {},
+                courses: {},
+            },
+            mounted() {
+                axios.get('/course/findExcellentCourse').then(function (response) {
+                    var data = response.data;
+                    vu.ExcellentCourse = data.data;
+                });
+                axios.get('/course/newCourse').then(function (response) {
+                    var data = response.data;
+                    vu.newCourse = data.data;
+                });
+                axios.get('/catalog/find')
+                    .then(function (response) {
+                        var data = response.data;
+                        vu.catalogs = data.data;
+                    });
+
+                //轮播切换
+                var div = $(".point")[0];
+                var points = $(div).find("span");
+                var imges = $(".chart");
+                var n = 0;
+                points[0].style.backgroundColor = "gray";
+                imges[0].style.zIndex = 3;
+                for (var i = 0; i < points.length; i++) {
+                    points[i].index = i;
+                    points[i].onclick = function () {
+                        for (var j = 0; j < imges.length; j++) {
+                            imges[j].style.zIndex = 0;
+                            points[j].style.backgroundColor = "#FFF";
+                        }
+                        n = i;
+                        this.style.backgroundColor = "gray";
+                        imges[this.index].style.zIndex = 3;
+                    }
+                }
+                setInterval(function () {
+                    for (var j = 0; j < imges.length; j++) {
+                        imges[j].style.zIndex = 0;
+                        points[j].style.backgroundColor = "#FFF";
+                    }
+                    points[n % 3].style.backgroundColor = "gray";
+                    imges[n % 3].style.zIndex = 1;
+                    n++;
+
+                }, 2000);
+
+            },
+            methods: {
+                enter: function (catalog) {
+                    $("#catalogShow").css("display", "block");
+                    axios.get('/course/findByCaid?caid=' + catalog.cid)
+                        .then(function (response) {
+                            console.log(response.data);
+                            vu.courses = response.data.data;
+                        });
+                },
+                type: function () {
+                    $("#catalogShow").css("display", "none");
+                },
+                toCourse: function (cid) {
+                    window.open('/login.html', '_blank')
+                }
+            }
+        })
+    ;
+</script>
+</html>

@@ -1,0 +1,16 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+li {
+    list-style: none;
+}
+
+.menu li:hover {
+    color: #F00;
+}
+
+.leftMenu:hover {
+    color: red;
+}

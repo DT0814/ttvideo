@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/course.css" type="text/css">
+    <script src="js/jquery-1.12.4.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/jquery.gallery.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <meta charset="UTF-8">
+    <title>TTVideo</title>
+</head>
+<body>
+<iframe src="title.html" width="100%" height="150px" style="border: none"></iframe>
+<hr style="height: 10px">
+<div id="bd" style="width: 100%;height: 100%">
+    <div class="container">
+        <ul class="row menu catalogs">
+            <li v-on:click="selectCourseByCaid(0,$event)" class="now"
+                style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">&nbsp;全部&nbsp;
+            </li>
+            <li v-on:click="selectCourseByCaid(cata.cid,$event)" v-for=" cata in catalogs"
+                style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">&nbsp;{{cata.name}}&nbsp;
+            </li>
+        </ul>
+        <hr>
+        <ul class="row menu price">
+            <li v-on:click="selectCourse(0,$event)" class="now"
+                style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">&nbsp;全部&nbsp;
+            </li>
+            <li v-on:click="selectCourse(1,$event)"
+                style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">
+                &nbsp;免费&nbsp;
+            </li>
+            <li v-on:click="selectCourse(2,$event)"
+                style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">
+                &nbsp;付费&nbsp;
+            </li>
+            <li v-on:click="selectCourse(3,$event)"
+                style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">
+                &nbsp;svip免费&nbsp;
+            </li>
+        </ul>
+    </div>
+    <div class="course"
+         style="width: 1250px;position: absolute;margin:auto; top: 0;left: 0;right: 0;bottom: 0;margin-top: 350px">
+        <div class="shadow" v-for="course in courses" v-on:click="toCourse(course.cid)"
+             style="width: 285px;height: 204px;margin: 10px;float: left;background-color: #fff">
+            <img style="border-radius: 6px 6px 0 0;width: 285px;height: 140px" v-bind:src="course.img">
+            <div style="width: 285px;height: 204px">
+                <p style="font-size: 16px;margin-top: 5px;padding-left: 10px;overflow: hidden;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;word-break: break-all;">
+                    {{course.cname}}
+                </p>
+                <span style="font-size: 16px;bottom: 10px;padding-left: 10px;color: red;">
+                    <template v-if="course.free ==1 ">
+                        免费
+                    </template>
+                    <template v-else>
+                        ￥{{course.price}}
+                         <span style="font-size: 12px;padding-left: 10px;">
+                             <template v-if="course.svipFree == 1">
+                                 SVIP免费
+                             </template>
+                             <template v-else>
+                                 SVIP:￥{{course.sPrice}}
+                             </template>
+                         </span>
+                    </template>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+<script>
+    var vu = new Vue({
+        el: "#bd",
+        data: {
+            catalogs: {},
+            caid: 0,
+            courses: {},
+            num: 0,
+        },
+        mounted() {
+            if (document.location.search.length > 1) {
+                console.log(document.location.search)
+                axios.get('/course/findByCname' + document.location.search).then(function (response) {
+                    var data = response.data;
+                    vu.courses = data.data;
+                });
+            } else {
+                axios.get('/course/find').then(function (response) {
+                    var data = response.data;
+                    vu.courses = data.data;
+                });
+            }
+
+            axios.get('/catalog/find')
+                .then(function (response) {
+                    var data = response.data;
+                    vu.catalogs = data.data;
+                });
+            vu.caid = 0;
+        },
+        methods: {
+            selectCourseByCaid: function (caid, event) {
+                $(".catalogs li").removeClass();
+                $(event.currentTarget).addClass("now")
+                var url = '/course/find?caid=+' + caid;
+                if (vu.num != 0) {
+                    url += '&num=' + vu.num;
+                }
+                axios.get(url).then(function (response) {
+                    var data = response.data;
+                    vu.courses = data.data;
+                });
+            },
+            selectCourse: function (num, event) {
+                $(".price li").removeClass();
+                $(event.currentTarget).addClass("now")
+                var url = '/course/find?num=+' + num;
+                if (vu.caid != 0) {
+                    url += '&caid=' + vu.caid;
+                }
+                axios.get(url).then(function (response) {
+                    var data = response.data;
+                    vu.courses = data.data;
+                });
+            },
+            toCourse: function (cid) {
+                window.open('/course.html?cid=' + cid);
+            },
+        }
+    });
+</script>
+</html>

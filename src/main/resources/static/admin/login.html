@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>登录</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../css/drag.css">
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <script src="../js/jquery-1.12.4.js"></script>
+    <script src="../js/drag.js"></script>
+    <script src="../bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <script src="../js/axios.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+</head>
+<body>
+<div class="container" id="bd" style="margin-top: 100px;width: 800px">
+    <div class="col-md-6 col-md-offset-3">
+        <div style="margin: 10px">
+            <h3>TT Video</h3>
+        </div>
+        <form id="loginForm">
+            <div class="form-group has-feedback">
+                <label>账号</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                    <input name="account" class="form-control" placeholder="请输入登录账号" maxlength="20" type="text">
+                </div>
+                <span style="color:red;display: none;" class="tips"></span>
+                <span style="display: none;" class=" glyphicon glyphicon-remove form-control-feedback"></span>
+                <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <label>密码</label>
+                <div class="input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                    <input name="pass" class="form-control" placeholder="请输入密码" maxlength="20" type="password">
+                </div>
+                <span style="color:red;display: none;" class="tips"></span>
+                <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback"></span>
+                <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback"></span>
+            </div>
+            <div style="text-align: center">
+                <div class="form-group">
+                    <div id="drag" style="margin: 0 auto"></div>
+                </div>
+            </div>
+            <div style="margin: 0 auto;text-align: center">
+                <input id="loginBut" class="btn  btn-primary" value="登录" disabled="disabled"
+                       v-on:click="login()"/>
+                <input id="str" value="loginBut" type="hidden">
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var vu = new Vue({
+            el: "#bd",
+            data: {},
+            mounted() {
+                if ($.trim($.cookie('admin_isLogin')) == $.trim("true")) {
+                    location.href = "./index.html";
+                }
+                $('#drag').drag();
+            },
+            methods: {
+                updateValidate: function (ele) {
+                    $(ele.currentTarget).prop("src", "${APP_PATH}/currency/validate.action?" + new Date());
+                },
+                login: function () {
+                    axios.post("../admin/login", $("#loginForm").serialize()).then(function (response) {
+                        console.log(response);
+                        var data = response.data;
+                        if (data.code != 200) {
+                            alert(data.msg);
+                        } else {
+                            $.cookie('admin_aname', data.data.aname, {expires: 7, path: '/'});
+                            $.cookie('admin_type', data.data.type, {expires: 7, path: '/'});
+                            $.cookie('admin_aid', data.data.aid, {expires: 7, path: '/'});
+                            $.cookie('admin_isLogin', true, {expires: 7, path: '/'});
+                            location.href = "./index.html";
+                        }
+                    });
+                }
+            }
+        }
+    );
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+li {
+    list-style: none;
+}
+
+.carousel {
+    position: relative;
+    margin: 20px 40px;
+}
+
+.carousel > img {
+    border-radius: 0px 8px 8px 0px;
+    position: absolute;
+    width: 83%;
+    height: 366px;
+    right: 0px;
+}
+
+.carousel .point {
+    position: absolute;
+    z-index: 10;
+    right: 40px;
+    top: 340px
+}
+
+.point span {
+    display: inline-block;
+    width: 30px;
+    height: 10px;
+    border-radius: 0px;
+    background-color: #fff;
+}
+
+.point span:hover {
+    background-color: gray;
+}
+
+.carousel .lside {
+    border-radius: 8px 0px 0px 8px;
+    position: absolute;
+    left: 0px;
+    height: 366px;
+    width: 17%;
+    z-index: 10;
+    background-color: #1c1f21;
+    cursor: pointer;
+}
+
+.lside ul li {
+    width: 200px;
+    height: 61px;
+    line-height: 61px;
+    border-top: 1px solid rgba(255, 255, 255, .2);
+    text-align: center;
+    box-shadow: #1b6d85;
+}
+
+.lside ul li:hover {
+    background-color: #ccc;
+}
+
+.menu li:hover {
+    color: #F00;
+}
+
+.lside ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+}
+
+.carousel .js-nav {
+    display: none;
+    position: absolute;
+    z-index: 15;
+    left: 200px;
+    background-color: #f7f5f8;
+    width: 600px;
+    height: 366px;
+}
+
+.carousel .js-nav > dl > dt > a, .carousel .js-nav > dl > dd > a {
+    text-decoration: none;
+    color: #000;
+}
+
+.carousel .js-nav > dl > dd > a:hover {
+    color: red;
+}
+
+.col_block {
+    display: inline-block;
+    width: 4px;
+    height: 24px;
+    background: #333;
+    position: relative;
+    top: 4px;
+}
+
+.shadow {
+    float: left;
+    margin-left: 20px;
+    width: 200px;
+    height: 400px;
+    cursor: pointer;
+}
+
+.shadow:hover {
+    -webkit-box-shadow: #ccc 0px 10px 10px;
+    -moz-box-shadow: #ccc 0px 10px 10px;
+    box-shadow: #ccc 0px 10px 10px;
+}

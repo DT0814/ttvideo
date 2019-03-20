@@ -1,0 +1,32 @@
+.now {
+    background-color: #333;
+    color: #fff;
+    border-radius: 3px;
+}
+
+.menu li:hover {
+    color: #F00;
+}
+
+.catalogs li {
+    list-style: none
+}
+
+.price li {
+    list-style: none
+}
+
+.shadow {
+    float: left;
+    margin-left: 20px;
+    width: 200px;
+    height: 400px;
+    cursor: pointer;
+}
+
+.shadow:hover {
+    -webkit-box-shadow: #ccc 0px 10px 10px;
+    -moz-box-shadow: #ccc 0px 10px 10px;
+    box-shadow: #ccc 0px 10px 10px;
+}
+

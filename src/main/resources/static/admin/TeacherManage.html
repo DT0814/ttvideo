@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="stylesheet" href="../bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link href="../css/custom-styles.css" rel="stylesheet"/>
+    <link href="../css/checkbox3.min.css" rel="stylesheet"/>
+    <link href="../css/pintuer.css" rel="stylesheet">
+    <link href="../css/admin.css" rel="stylesheet">
+    <script src="../js/jquery-1.12.4.js"></script>
+    <script src="../bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <script src="../js/axios.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+    <script src="../js/pintuer.js"></script>
+
+</head>
+<body>
+<div id="bd" class="container" v-cloak style="width: 100%;background: rgb(237, 237, 237)">
+    <div class="header" style="background: rgb(237, 237, 237);margin: 10px">
+        <h1 class="page-header" style="font-size: 36px">
+            TT Video后台管理系统
+            <small>教师管理</small>
+        </h1>
+    </div>
+    <div class="row" style="background: rgb(237, 237, 237);margin: 10px">
+        <div class="col-md-6 form-inline ">
+            <div class="form-group">
+                <select id="querySelect" class="form-control" style="height: 35px;margin: 0px">
+                    <option value="0" selected>查询全部</option>
+                    <option value="tname">姓名查询</option>
+                </select>
+                <input id="queryInput" class="form-control" style="height: 35px">
+                <span class="btn btn-default " v-on:click="query()">查询</span>
+            </div>
+        </div>
+    </div>
+    <div class="row table-responsive" style="text-align: center;background: rgb(237, 237, 237)">
+        <table class="checkbox-round table table-hover table-responsive table-bordered "
+               style="text-align: center;margin: 20px;width: 97%">
+            <tr class="row">
+                <td>序号</td>
+                <td>姓名</td>
+                <td>联系方式</td>
+                <td>简介</td>
+                <td>
+                    <button style="height: 35px;margin: 0px" type="button" class="btn btn-success"
+                            aria-label="Left Align"
+                            v-on:click="addmodal()">
+                        添加教师
+                    </button>
+                </td>
+            </tr>
+            <tr class="row" v-for="(teacher,index) in teachers " v-cloak>
+                <td>
+                    {{index+1}}
+                </td>
+                <td>{{teacher.tname}}</td>
+                <td>{{teacher.phone}}</td>
+                <td>{{teacher.introduce}}</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button class="btn btn-primary " v-on:click="updateModal(teacher)">修改</button>
+                        <button class="btn btn-danger" v-on:click="deleteTeacher(teacher)">删除</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="row" style="background: rgb(237, 237, 237)">
+        <div class="checkbox col-md-1">
+        </div>
+        <div class="col-md-11" style="text-align: center">
+            <nav aria-label="Page navigation" class="col-md-8">
+                <ul class="pagination">
+                    <li v-if="!pageInfo.firstPage">
+                        <a v-on:click="topage(pageInfo.proPage)" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <template v-for="num in pageInfo.navigatepageNums">
+                        <template v-if="pageInfo.currentNum==num">
+                            <li class="active" v-on:click="topage(num)">
+                                <span>{{num}} <span class="sr-only">(currentNum)</span></span>
+                            </li>
+                        </template>
+                        <template v-else>
+                            <li v-on:click="topage(num)"><span>
+                            <span aria-hidden="true">{{num}}</span>   </span>
+                            </li>
+                        </template>
+                    </template>
+                    <li v-if="!pageInfo.lastPage">
+                        <a v-on:click="topage(pageInfo.nextPage)" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+    <!-- 添加展示窗口 -->
+    <div id="addModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button class="close" id="addClose" data-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-title">
+                    <h1 class="text-center">添加</h1>
+                </div>
+                <div class="modal-body">
+                    <form class="form-group" id="addForm">
+                        <div class="form-group">
+                            <label>教师名</label>
+                            <input class="form-control" name="tname"/>
+                        </div>
+                        <div class="form-group">
+                            <label>教师简介</label>
+                            <input class="form-control" name="introduce" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label>联系方式</label>
+                            <input class="form-control" name="phone" type="text">
+                        </div>
+                        <div class="text-right">
+                            <span class="btn btn-primary" v-on:click="add">提交</span>
+                            <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 修改展示窗口 -->
+    <div id="updateModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button class="close" data-dismiss="modal">
+                    </button>
+                </div>
+                <div class="modal-title">
+                    <h1 class="text-center">修改</h1>
+                </div>
+                <div class="modal-body">
+                    <form id="updateForm">
+                        <div class="form-group">
+                            <label>教师名</label>
+                            <input class="form-control" name="tname"/>
+                        </div>
+                        <div class="form-group">
+                            <label>联系方式</label>
+                            <input class="form-control" name="phone" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label>教师简介</label>
+                            <input class="form-control" name="introduce" type="text">
+                        </div>
+                        <div class="text-right">
+                            <span class="btn btn-primary" v-on:click="update">提交</span>
+                            <button class="btn btn-danger" data-dismiss="modal">取消</button>
+                        </div>
+                        <input type="hidden" name="tid">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 查询表单-->
+    <form id="queryForm">
+        <input type="hidden" name="tname">
+    </form>
+</div>
+<script>
+    var vu = new Vue({
+            el: "#bd",
+            data: {
+                pageInfo: {},
+                teachers: {},
+                admin: {},
+                num: {},
+                nums: "",
+                modals: "",
+            },
+            mounted() {
+                axios.get('../admin/findByAid?aid=' + $.cookie('admin_aid'))
+                    .then(function (response) {
+                        var data = response.data;
+                        console.log(data);
+                        if (data.code == 200) {
+                            vu.admin = data.data;
+                        } else {
+                            $.cookie('admin_aname', null, {expires: -1, path: '/'});
+                            $.cookie('admin_type', null, {expires: -1, path: '/'});
+                            $.cookie('admin_aid', null, {expires: -1, path: '/'});
+                            $.cookie('admin_isLogin', null, {expires: -1, path: '/'});
+                            location.href = "./index.html";
+                        }
+                    });
+                this.$options.methods.topage(1);
+                setTimeout(function () {
+                    $("#checkAllInput").prop("checked", false);
+                }, 500);
+            },
+            methods: {
+                updateModal: function (teacher) {
+                    $("#updateForm").find("input[name='introduce']").val(teacher.introduce);
+                    $("#updateForm").find("input[name='tid']").val(teacher.tid);
+                    $("#updateForm").find("input[name='phone']").val(teacher.phone);
+                    $("#updateForm").find("input[name='tname']").val(teacher.tname);
+                    $("#updateModal").modal();
+                },
+                update: function () {
+                    var formData = new FormData($("#updateForm")[0]);
+                    axios.post('/teacher/update', formData)
+                        .then(function (response) {
+                            var result = response.data;
+                            if (result.code == 200) {
+                                alert("更新成功");
+                                $("#updateModal").modal("hide");
+                                vu.$options.methods.topage(vu.pageInfo.currentNum);
+                            } else {
+                                alert(result.msg);
+                                $("#updateModal").modal("hide");
+                            }
+                        });
+                },
+                addmodal: function () {
+                    vu.$options.methods.emptyFrom($("#addModal").find("input"));
+                    $("#addModal").modal();
+                },
+                add: function () {
+                    var formData = new FormData($("#addForm")[0]);
+                    axios.post('../teacher/add', formData)
+                        .then(function (response) {
+                            var result = response.data;
+                            if (result.code == 200) {
+                                alert("添加成功");
+                                $("#addModal").modal("hide");
+                                vu.$options.methods.topage(1);
+                            } else {
+                                alert(result.msg);
+                            }
+                        });
+                    vu.$options.methods.topage(1);
+                },
+                topage: function (page) {
+                    console.log("到第" + page)
+                    var str = "";
+                    $("#queryForm").find('input').each(function () {
+                        if ($.trim($(this).val()) != "") {
+                            str += $.trim($(this).attr("name")) + "=" + $.trim($(this).val());
+                        }
+                    });
+                    axios.get('../teacher/findAll?page=' + page + "&" + str)
+                        .then(function (response) {
+                            console.log(response);
+                            var result = response.data;
+                            vu.pageInfo = result.data;
+                            vu.teachers = vu.pageInfo.data;
+                        });
+                },
+                deleteTeacher: function (teacher) {
+                    if (confirm("您确定要删除吗?")) {
+                        axios.get('../teacher/delete?tid=' + teacher.tid).then(function (response) {
+                            var data = response.data;
+                            if (data.code == 200) {
+                                alert("删除成功");
+                                vu.$options.methods.topage(vu.pageInfo.currentNum);
+                            }
+                        })
+                    }
+                },
+                emptyFrom: function (ele) {
+                    $.each(ele, function () {
+                        $(this).val("");
+                    })
+                },
+                query: function () {
+                    $("#queryForm").find('input').each(function () {
+                        $(this).val("");
+                    });
+                    var select = $("#querySelect").val();
+                    var inputValue = $("#queryInput").val();
+                    $("#queryForm").find("input[name='" + select + "']").val(inputValue);
+                    vu.$options.methods.topage(1);
+                },
+            }
+
+        })
+    ;
+</script>
+</body>
+</html>
