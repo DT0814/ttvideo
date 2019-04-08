@@ -490,6 +490,20 @@
             </div>
         </div>
     </div>
+    <!-- 进度条 -->
+    <div id="jdModal" class="modal fade" style="z-index: 20000">
+        <div class="modal-dialog" style="width: 350px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-info progress-bar-striped active" style="width: 50%;">
+                            <div class="progress-value" name="value">50%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     var vu = new Vue({
@@ -687,9 +701,21 @@
                     $("#updateResourceModal").modal({backdrop: 'static', keyboard: false});
                 },
                 addResource: function () {
+                    $("#jdModal").modal({backdrop: 'static', keyboard: false});
+                    var div = $("#jdModal").find("div[name='value']");
                     var formData = new FormData($("#addResourceForm")[0]);
-                    axios.post('../resource/add', formData)
+                    let config = {
+                        onUploadProgress: function (progressEvent) {
+                            var complete = (progressEvent.loaded / progressEvent.total * 100 | 0)
+                            div.html(complete + "%");
+                            div.parent().attr("style", "width: " + complete + "%;");
+                            this.jindu = complete
+                        },
+                        headers: {'Content-Type': 'multipart/form-data'}
+                    };
+                    axios.post('../resource/add', formData, config)
                         .then(function (response) {
+                            $("#jdModal").modal("hide");
                             var result = response.data;
                             if (result.code == 200) {
                                 axios.get('../resource/findByCid?cid=' + vu.cid)

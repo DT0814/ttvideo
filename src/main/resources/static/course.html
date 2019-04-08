@@ -50,12 +50,43 @@
             <div class="col-md-9">
                 <div style="height: 66px;background-color: #fff;border-radius: 8px;">
                     <ul class="courseMenu" style="text-align: center">
-                        <li class="now">课程介绍</li>
-                        <li>录播课程</li>
+                        <li v-on:click="selectMenu($event)" divid="CourseSynopsis" class="now">课程介绍</li>
+                        <li v-on:click="selectMenu($event)" divid="CourseList">录播课程</li>
                     </ul>
                 </div>
-                <div style="background-color: #fff;margin-top: 20px;border-radius: 8px;min-height: 800px;padding: 20px">
-                    {{course.synopsis}}
+                <div
+                        style="background-color: #fff;margin-top: 20px;border-radius: 8px;min-height: 800px;padding: 20px">
+                    <div id="CourseSynopsis">
+                        {{course.synopsis}}
+                    </div>
+                    <div id="CourseList" style="display: none">
+                        <div style="color: #333;font-size: 16px;font-weight: 700;">
+                            <span class="col_block"></span>
+                            &nbsp;&nbsp;课程目录
+                        </div>
+                        <template v-for="(res,index) in resources">
+                            <div>
+                                <div class="padlr_10 h46 clearfix fl  btn "
+                                     style="text-align: left;width: 710px">
+                                    <div class="courseItem" v-on:click="play(res.url)">
+                                        <p class=" fl font_hidden " style="width: 710px">
+                                            <span class="glyphicon glyphicon-play-circle"></span>
+                                            <span class="font_hidden">第{{index+1}}讲</span>
+                                            <span style="margin-left: 10px">{{res.rname}}</span>
+                                        </p>
+                                    </div>
+                                    <template v-if="res.haveCourseware">
+                                        <div class=" h46" style="pading-top: 20px">
+                                            <span style="font-size: 16px;color: #f5f5f5;">|</span>
+                                            <div class="btn down_btn" v-on:click="download(res.rid)">
+                                                下载课件
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
                 </div>
             </div>
             <div class="col-md-3" style="margin-top: 10px;border-radius: 8px;min-height: 800px">
@@ -71,11 +102,11 @@
                     <div class="shadow" v-for="course in courses" v-on:click="toCourse(course.cid)">
                         <img v-bind:src="course.img" width="120px" height="60px" style="border-radius: 4px;float: left">
                         <div style="height: 60px">
-                            <p>
+                            <label>
                                 {{course.cname}}
-                            </p>
-                            <div style="height: 46px">
-                                <span style="font-size: 12px;color: #d51423;">
+                            </label>
+                            <div style="height: 47px">
+                                <span style="font-size: 12px;color: #d51423;padding-bottom: 6px">
                                     <template v-if="course.free ==1 ">
                                       免费<br>
                                     </template>
@@ -201,6 +232,7 @@
             courses: {},
             course: {},
             teacher: {},
+            resources: {},
         },
         mounted() {
             axios.get('/course/findCourseByCid' + document.location.search).then(function (response) {
@@ -232,15 +264,43 @@
 
         },
         methods: {
-            play: function () {
+            play: function (src) {
                 var curtime = player.currentTime();
-                player.src("./ckin.mp4");
+                player.src(src);
                 player.load();
                 player.currentTime(curtime);
                 player.play();
             },
             toCourse: function (cid) {
                 window.open('/course.html?cid=' + cid)
+            },
+            selectMenu: function (event) {
+                $(".courseMenu").find("li").removeClass("now")
+                var el = $(event.currentTarget);
+                var divid = el.attr("divid")
+                var class_ = el.attr("class")
+                $("#CourseSynopsis").attr("style", "display:none;");
+                $("#CourseList").attr("style", "display:none;");
+                $("#" + divid).attr("style", "display:block;");
+                if (class_ != "now") {
+                    el.attr("class", "now")
+                }
+                if (divid == "CourseList") {
+                    axios.get('/resource/findByCid?cid=' + vu.course.cid)
+                        .then(function (response) {
+                            vu.resources = response.data.data;
+                        });
+                }
+            },
+            download: function (rid) {
+                var form = $("<form>");
+                form.attr("style", "display:none");
+                form.attr("target", "");
+                form.attr("method", "post");//提交方式为post
+                form.attr("action", "/resource/download?rid=" + rid);//定义action
+                $("body").append(form);
+                form.submit();
+                console.log(rid)
             }
         }
     });

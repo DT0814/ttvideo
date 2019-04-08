@@ -6,12 +6,14 @@ import com.xawl.ttvideo.pojo.Result;
 import com.xawl.ttvideo.service.ResourceService;
 import com.xawl.ttvideo.utils.ResourceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.Date;
 import java.util.List;
 
@@ -93,10 +95,53 @@ public class ResourcesController {
     @GetMapping("findByCid")
     public Result findByCid(Integer cid) {
         List<Resources> res = service.findByCid(cid);
-        for (Resources resources : res) {
-            System.out.println(resources);
-        }
         return Result.success(res);
+    }
+
+    @RequestMapping("/download")
+    private String download(HttpServletResponse response, Integer rid) throws UnsupportedEncodingException {
+        Resources res = service.getOneById(rid);
+        String aStatic = ClassUtils.getDefaultClassLoader().getResource("static").getPath();
+        File file = new File(aStatic + "/" + res.getCoursewareUrl().substring(3));
+        String fileName = res.getRname() + res.getCoursewareUrl().substring(res.getCoursewareUrl().lastIndexOf("."));
+        fileName = new String(fileName.getBytes("GBK"), "ISO-8859-1");
+        System.out.println(fileName);
+        if (file.exists()) {
+            response.addHeader("Content-Disposition",
+                    "attachment;fileName=" + fileName);
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            try {
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                OutputStream outputStream = response.getOutputStream();
+                int i = bis.read(buffer);
+                while (i != -1) {
+                    outputStream.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+                return "下载成功";
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (bis != null) {
+                    try {
+                        bis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (fis != null) {
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return "下载失败";
     }
 
 }
