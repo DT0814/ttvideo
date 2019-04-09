@@ -153,18 +153,13 @@ public class CourseService {
                         list.add(byId.get());
                     }
                 }
-                ExampleMatcher matching = ExampleMatcher.matching();
-                Example<Course> example = Example.of(course, matching);
-                pageable = PageRequest.of(0, 6 - split.length, new Sort(Sort.Direction.DESC, "clickNum"));
-            } else {
-                pageable = PageRequest.of(0, 6, new Sort(Sort.Direction.DESC, "clickNum"));
             }
-        } else {
-            pageable = PageRequest.of(0, 6, new Sort(Sort.Direction.DESC, "clickNum"));
         }
+        pageable = PageRequest.of(0, 6, new Sort(Sort.Direction.DESC, "clickNum"));
         Page<Course> all = dao.findAll(Example.of(course), pageable);
         list.addAll(all.getContent());
-        return list;
+        distinct(list);
+        return list.subList(0, 6);
     }
 
     public Course findCourseByCid(Integer cid) {
@@ -179,5 +174,18 @@ public class CourseService {
     @Transactional
     public void giveLike(Integer cid) {
         dao.giveLike(cid);
+    }
+
+    public static void distinct(List list) {
+        Set set = new HashSet();
+        List newList = new ArrayList();
+        for (Iterator iter = list.iterator(); iter.hasNext(); ) {
+            Object element = iter.next();
+            if (set.add(element))
+                newList.add(element);
+        }
+        list.clear();
+        list.addAll(newList);
+        System.out.println(" remove duplicate " + list);
     }
 }
