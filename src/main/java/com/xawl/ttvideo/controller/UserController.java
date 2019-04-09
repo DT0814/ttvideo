@@ -3,6 +3,7 @@ package com.xawl.ttvideo.controller;
 import com.xawl.ttvideo.pojo.Result;
 import com.xawl.ttvideo.pojo.User;
 import com.xawl.ttvideo.service.UserService;
+import com.xawl.ttvideo.utils.UserBased;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +52,16 @@ public class UserController {
             user.setName("新用戶" + user.getAccount());
             service.add(user);
             return Result.success(200, "注册成功", user);
+        }
+    }
+
+    @PostMapping("/pingfen")
+    public Result pingfen(Integer uid, Integer cid, String score) {
+        boolean b = UserBased.writeToUserRecommendLine(uid, cid, score);
+        if (b) {
+            return Result.success(null);
+        } else {
+            return Result.err(401, "评分失败");
         }
     }
 }

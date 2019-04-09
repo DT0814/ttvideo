@@ -1,13 +1,5 @@
 package com.xawl.ttvideo.utils;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Scanner;
-import java.util.Set;
-
 import com.xawl.ttvideo.pojo.UserRecommend;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;
@@ -19,6 +11,7 @@ import org.apache.mahout.cf.taste.model.*;
 import org.apache.mahout.cf.taste.recommender.*;
 import org.apache.mahout.cf.taste.similarity.*;
 import org.junit.Test;
+import org.springframework.util.ClassUtils;
 
 import java.io.*;
 import java.util.*;
@@ -26,12 +19,17 @@ import java.util.*;
 
 public class UserBased {
 
-    final static int NEIGHBORHOOD_NUM = 2;
-    final static int RECOMMENDER_NUM = 3;
+    final static int NEIGHBORHOOD_NUM = 50;
+    final static int RECOMMENDER_NUM = 5;
 
-    public List<UserRecommend> calculation() throws IOException, TasteException {
-        String file = "D:\\test.cvs";
-        DataModel model = new FileDataModel(new File(file));
+    public static List<UserRecommend> calculation() throws IOException, TasteException {
+        String aStatic = ClassUtils.getDefaultClassLoader().getResource("static").getPath();
+        String fileName = aStatic + "/" + "UserRecommend.cvs";
+        File file = new File(fileName);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        DataModel model = new FileDataModel(file);
         UserSimilarity user = new EuclideanDistanceSimilarity(model);
         NearestNUserNeighborhood neighbor = new NearestNUserNeighborhood(NEIGHBORHOOD_NUM, user, model);
         Recommender r = new GenericUserBasedRecommender(model, neighbor, user);
@@ -46,8 +44,6 @@ public class UserBased {
             List<RecommendedItem> list = r.recommend(uid, RECOMMENDER_NUM);
             for (RecommendedItem ritem : list) {
                 sb.append(ritem.getItemID() + ",");
-/*
-                System.out.printf("(%s,%f)", ritem.getItemID(), ritem.getValue());*/
             }
             if (sb.length() > 1) {
                 sb.delete(sb.length() - 1, sb.length());
@@ -55,13 +51,43 @@ public class UserBased {
             userRecommend.setCids(sb.toString());
             sb.delete(0, sb.length());
             result.add(userRecommend);
-            /* System.out.println();*/
         }
         return result;
     }
 
+    public static boolean writeToUserRecommendLine(Integer uid, Integer cid, String score) {
+        String aStatic = ClassUtils.getDefaultClassLoader().getResource("static").getPath();
+        String fileName = aStatic + "/" + "UserRecommend.cvs";
+        File file = new File(fileName);
+        BufferedWriter nw = null;
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            nw = new BufferedWriter(new FileWriter(file, true));
+            nw.write(uid + "," + cid + "," + score + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (nw != null) {
+                try {
+                    nw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return true;
+    }
+
     @Test
     public void test() throws IOException, TasteException {
+        new UserBased().writeToUserRecommendLine(3, 103, 4.0 + "");
         List<UserRecommend> calculation = new UserBased().calculation();
+        for (UserRecommend u : calculation) {
+            System.out.println(u);
+        }
     }
 }

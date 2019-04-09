@@ -97,6 +97,8 @@
                          </span>
                     </template>
                 </span>
+                    <span @click.stop class=" glyphicon glyphicon-thumbs-up" style="float: right"
+                          v-on:click="giveLike(course.cid)"></span>
                 </div>
             </div>
         </div>
@@ -238,7 +240,16 @@
                     $("#catalogShow").css("display", "none");
                 },
                 toCourse: function (cid) {
-                    window.open('/login.html', '_blank')
+                    window.open('/course.html?cid=' + cid, '_blank')
+                },
+                giveLike: function (cid) {
+                    console.log(cid)
+                    var data = new FormData();
+                    data.append("cid", cid);
+                    axios.post('/course/giveLike', data)
+                        .then(function (response) {
+                            console.log(response.data);
+                        });
                 }
             }
         })

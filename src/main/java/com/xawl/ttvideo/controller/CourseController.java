@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,7 +94,6 @@ public class CourseController {
 
     @GetMapping("findAll")
     public Result findAll(Integer page, Course course) {
-        System.out.println(course);
         Page<Course> all = service.findAll(--page, course);
         PageInfo<Course> pageInfo = new PageUtils<Course>().getPageInfo(all);
         return Result.success(pageInfo);
@@ -113,7 +113,6 @@ public class CourseController {
 
     @GetMapping("findByCaid")
     public Result findByCaid(Integer caid) {
-        System.out.println(caid);
         List<Course> res = service.findBycaid(caid);
         return Result.success(res);
     }
@@ -137,8 +136,14 @@ public class CourseController {
     }
 
     @GetMapping("recommend")
-    public Result recommend(String uid) {
+    public Result recommend(Integer uid) {
         List<Course> res = service.findRecommend(uid);
         return Result.success(res);
+    }
+
+    @PostMapping("giveLike")
+    public Result giveLike(Integer cid) {
+        service.giveLike(cid);
+        return Result.success(null);
     }
 }

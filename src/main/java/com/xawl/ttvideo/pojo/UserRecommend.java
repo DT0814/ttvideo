@@ -14,6 +14,11 @@ public class UserRecommend {
     public UserRecommend() {
     }
 
+    public UserRecommend(int uid, String cids) {
+        this.uid = uid;
+        this.cids = cids;
+    }
+
     public Integer getUid() {
         return uid;
     }
@@ -31,4 +36,11 @@ public class UserRecommend {
         this.cids = cids;
     }
 
+    @Override
+    public String toString() {
+        return "UserRecommend{" +
+                "uid=" + uid +
+                ", cids='" + cids + '\'' +
+                '}';
+    }
 }

@@ -1,18 +1,22 @@
 package com.xawl.ttvideo.service;
 
 import com.xawl.ttvideo.dao.CourseDao;
+import com.xawl.ttvideo.dao.UserRecommendDao;
 import com.xawl.ttvideo.pojo.Course;
+import com.xawl.ttvideo.pojo.UserRecommend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 public class CourseService {
     @Autowired
     private CourseDao dao;
+    @Autowired
+    private UserRecommendDao userRecommendDao;
 
     public Course add(Course course) {
         dao.saveAndFlush(course);
@@ -133,11 +137,34 @@ public class CourseService {
         return byCnameLike;
     }
 
-    public List<Course> findRecommend(String uid) {
+    public List<Course> findRecommend(Integer uid) {
         Course course = new Course();
-        Pageable pageable = PageRequest.of(0, 6, new Sort(Sort.Direction.DESC, "intime"));
+        Optional<UserRecommend> optional = userRecommendDao.findById(uid);
+        Pageable pageable;
+        List<Course> list = new ArrayList<>();
+        if (optional.isPresent()) {
+            UserRecommend userRecommend = optional.get();
+            if (userRecommend.getCids() != null && userRecommend.getCids().length() > 0) {
+                String cids = userRecommend.getCids();
+                String[] split = cids.split(",");
+                for (String s : split) {
+                    Optional<Course> byId = dao.findById(Integer.parseInt(s));
+                    if (byId.isPresent()) {
+                        list.add(byId.get());
+                    }
+                }
+                ExampleMatcher matching = ExampleMatcher.matching();
+                Example<Course> example = Example.of(course, matching);
+                pageable = PageRequest.of(0, 6 - split.length, new Sort(Sort.Direction.DESC, "clickNum"));
+            } else {
+                pageable = PageRequest.of(0, 6, new Sort(Sort.Direction.DESC, "clickNum"));
+            }
+        } else {
+            pageable = PageRequest.of(0, 6, new Sort(Sort.Direction.DESC, "clickNum"));
+        }
         Page<Course> all = dao.findAll(Example.of(course), pageable);
-        return all.getContent();
+        list.addAll(all.getContent());
+        return list;
     }
 
     public Course findCourseByCid(Integer cid) {
@@ -147,5 +174,10 @@ public class CourseService {
         } else {
             return null;
         }
+    }
+
+    @Transactional
+    public void giveLike(Integer cid) {
+        dao.giveLike(cid);
     }
 }

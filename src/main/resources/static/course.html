@@ -7,6 +7,15 @@
     <link href="css/video-js.min.css" rel="stylesheet">
     <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
     <link rel="stylesheet" href="css/course_video.css">
+    <script src="js/video.min.js"></script>
+    <script src="js/jquery-1.12.4.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/jquery.gallery.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <link href="css/star-rating.css" media="all" rel="stylesheet" type="text/css"/>
+    <script src="js/star-rating.js" type="text/javascript"></script>
     <meta charset="UTF-8">
     <title>TTVideo</title>
 
@@ -40,6 +49,10 @@
                 <span style=" font-size: 18px;pxont-weight: 700;color: #666">讲师:</span>
                 <spen style=" font-size: 18px;pxont-weight: 700;margin-left: 20px;color: #666" id="tname">
                 </spen>
+                <div style="margin-top: 20px">
+                    <input id="rating-input" type="text"/>
+                </div>
+                <hr>
             </div>
         </div>
     </div>
@@ -130,13 +143,6 @@
         </div>
     </div>
 </div>
-<script src="js/video.min.js"></script>
-<script src="js/jquery-1.12.4.js"></script>
-<script src="js/jquery.cookie.js"></script>
-<script src="js/jquery.gallery.js"></script>
-<script src="js/vue.js"></script>
-<script src="js/axios.js"></script>
-<script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
 <script type="text/javascript">
     videojs.addLanguage('zh-CN', {
         "Play": "播放",
@@ -235,7 +241,33 @@
             resources: {},
         },
         mounted() {
-            axios.get('/course/findCourseByCid' + document.location.search).then(function (response) {
+
+            var cid = document.location.search.substring(document.location.search.lastIndexOf('=') + 1)
+            var start = $('#rating-input');
+            start.rating({
+                min: 0,
+                max: 5,
+                step: 1,
+                size: 'xs',
+                showClear: false,
+                showCaption: true,
+            });
+            if ($.cookie("Course_pingfen_" + cid) != null) {
+                $(".filled-stars").width($.cookie("Course_pingfen_" + cid) * 20 + "%");
+                $(".caption").find("span").html($.cookie("Course_pingfen_" + cid) + ".0");
+            }
+            start.on('rating.change', function () {
+                $.cookie("Course_pingfen_" + cid, start.val());
+                let data = new FormData();
+                data.append('uid', $.cookie("user_uid"));
+                data.append('cid', cid);
+                data.append('score', start.val());
+                axios.post('/user/pingfen', data)
+                    .then(function (response) {
+                        var result = response.data;
+                    })
+            });
+            axios.get('/course/findCourseByCid?cid=' + cid).then(function (response) {
                 var data = response.data;
                 console.log(data.data)
                 vu.course = data.data;
