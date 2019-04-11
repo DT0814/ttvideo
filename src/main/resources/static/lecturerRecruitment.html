@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/lecturerRecruitment.css">
+    <script src="js/jquery-1.12.4.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/jquery.gallery.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <meta charset="UTF-8">
+    <title>TTVideo个人中心</title>
+</head>
+<body>
+<iframe src="title.html" width="100%" height="150px" style="border: none"></iframe>
+<div style="margin-top: 10px;background-color:  #f5f5f5" id="bd">
+    <div class="container">
+        <div class="row" style="height: 800px;width: 100%">
+            <div class="col-md-2" style="height: 600px">
+                <div style="background: #fff;margin-top: 30px;border-radius: 4px;padding-bottom: 10px">
+                    <div style="height: 60px;text-align: center">
+                        <div style="padding-top: 20px">
+                            <span class="glyphicon glyphicon-th"></span>&nbsp;
+                            <b style="font-family: STHeiti">招募中心</b>
+                        </div>
+                    </div>
+                    <hr style="margin: 0px"/>
+                    <div class="leftMenu" style="color: red">讲师招募
+                    </div>
+                </div>
+            </div>
+            <div class="rightDiv" id="byCourseDiv">
+                <div class="col-md-10 "
+                     style="background-color: #fff;height: 600px;margin-top: 30px;padding: 0 40px 0 40px">
+                    <div class="person_content" data-v-ecce6c28="">
+                        <div class="person_title" data-v-ecce6c28="">
+                            讲师招募
+                        </div>
+                        <div class="person_info" data-v-ecce6c28="">
+                            <div class="clearfix" data-v-ecce6c28=""><p>
+                                本网站是专注于在线教育内容提供的平台,致力于为用户提供优质的在线教育内容。为适应平台的发展和给用户提供更多高质量的内容，我们期待有理想、有追求的<em>您能加入</em>我们一起通过互联网无边界的方式进行传播服务到更多努力求知的用户!
+                            </p>
+                                <p><br></p>
+                                <p> 讲师权益 </p>
+                                <p> ·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1、能力变现：技术能力的兑现且收益可持续 </p>
+                                <p> ·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2、精湛加密：保护你的知识版权 </p>
+                                <p> ·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3、品牌塑造：帮你打造在线教育领域个人品牌 </p>
+                                <p><br></p>
+                                <p> 申请条件 </p>
+                                <p> ·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1、教育行业内2年以上从业经验，自身有丰富的教学知识体系及经验 </p>
+                                <p> ·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2、拥有过讲师、培训讲师经历 </p>
+                                <p> ·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3、喜欢在行业内分享心得（写博客，逛论坛等） </p>
+                                <p> ·&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4、参与过知名教育行业峰会讲师 </p></div>
+                            <div data-v-ecce6c28=""><a href="javascript:" class="apply_btn"
+                                                       data-v-ecce6c28="">申请成为讲师</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var vu = new Vue({
+        el: "#bd",
+        data: {},
+        mounted() {
+        },
+        methods: {
+            byCourse: function (event) {
+                vu.$options.methods.hideDiv();
+                $("#byCourseDiv").removeAttr("style")
+                $(event.currentTarget).attr("style", "color:red");
+                axios.get('/userByCourse/getByUid?uid=' + $.cookie("user_uid"))
+                    .then(function (response) {
+                        vu.courses = response.data.data;
+                    })
+            },
+        },
+    });
+</script>
+</body>
+
+</html>

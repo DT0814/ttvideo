@@ -5,6 +5,7 @@ import com.xawl.ttvideo.pojo.Result;
 import com.xawl.ttvideo.service.CatalogService;
 import com.xawl.ttvideo.service.CourseService;
 import com.xawl.ttvideo.service.TeacherService;
+import com.xawl.ttvideo.service.UserGiveLikeCourseService;
 import com.xawl.ttvideo.utils.PageInfo;
 import com.xawl.ttvideo.utils.PageUtils;
 import com.xawl.ttvideo.utils.ResourceUtils;
@@ -28,6 +29,8 @@ import java.util.List;
 public class CourseController {
     @Autowired
     private CourseService service;
+    @Autowired
+    private UserGiveLikeCourseService userGiveLikeCourseService;
     @Autowired
     private TeacherService teacherService;
     @Autowired
@@ -142,8 +145,9 @@ public class CourseController {
     }
 
     @PostMapping("giveLike")
-    public Result giveLike(Integer cid) {
+    public Result giveLike(Integer uid, Integer cid) {
         service.giveLike(cid);
+        userGiveLikeCourseService.giveLike(uid,cid);
         return Result.success(null);
     }
 }

@@ -14,3 +14,23 @@ li {
 .leftMenu:hover {
     color: red;
 }
+
+.leftMenu {
+    margin: 20px;
+    text-align: center;
+    cursor: pointer
+}
+
+.shadow {
+    float: left;
+    margin-left: 20px;
+    width: 200px;
+    height: 400px;
+    cursor: pointer;
+}
+
+.shadow:hover {
+    -webkit-box-shadow: #ccc 0px 10px 10px;
+    -moz-box-shadow: #ccc 0px 10px 10px;
+    box-shadow: #ccc 0px 10px 10px;
+}

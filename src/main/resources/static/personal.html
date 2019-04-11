@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
@@ -16,7 +17,7 @@
 </head>
 <body>
 <iframe src="title.html" width="100%" height="150px" style="border: none"></iframe>
-<div style="margin-top: 10px;background-color:  #f5f5f5">
+<div style="margin-top: 10px;background-color:  #f5f5f5" id="bd">
     <div class="container">
         <div class="row" style="height: 800px;width: 100%">
             <div class="col-md-2" style="height: 600px">
@@ -28,9 +29,12 @@
                         </div>
                     </div>
                     <hr style="margin: 0px"/>
-                    <div class="leftMenu" style="margin: 20px;text-align: center;cursor: pointer">我的课程</div>
-                    <div class="leftMenu" style="margin: 20px;text-align: center;cursor: pointer">我的收藏</div>
-                    <div class="leftMenu" style="margin: 20px;text-align: center;cursor: pointer">学习记录</div>
+                    <div class="leftMenu"
+                         v-on:click="byCourse($event)">已购课程
+                    </div>
+                    <div class="leftMenu"
+                         v-on:click="clickCourse($event)">点赞课程
+                    </div>
                 </div>
                 <div style="background: #fff;margin-top: 30px;border-radius: 4px;padding-bottom: 10px">
                     <div style="height: 60px;text-align: center">
@@ -40,24 +44,170 @@
                         </div>
                     </div>
                     <hr style="margin: 0px"/>
-                    <div class="leftMenu" style="margin: 20px;text-align: center;cursor: pointer">个人资料</div>
-                    <div class="leftMenu" style="margin: 20px;text-align: center;cursor: pointer">修改密码</div>
-                    <div class="leftMenu" style="margin: 20px;text-align: center;cursor: pointer">我的关注</div>
-                    <div class="leftMenu" style="margin: 20px;text-align: center;cursor: pointer">我的订单</div>
+                    <div class="leftMenu"
+                         v-on:click="showPersonal($event)">个人资料
+                    </div>
+                    <div class="leftMenu"
+                         v-on:click="updatePass($event)">修改密码
+                    </div>
                 </div>
             </div>
-            <div class="col-md-10" style="background-color: #fff;height: 600px;margin-top: 30px;">
-                <div style="text-align: center;width: 100px;padding-top: 20px;">
-                    <span style="color: red">修改密码</span>
+            <div class="rightDiv" id="byCourseDiv">
+                <div class="col-md-10 " style="background-color: #fff;height: 600px;margin-top: 30px;">
+                    <div style="text-align: center;width: 100px;padding-top: 20px;">
+                        <span style="color: red">已购课程</span>
+                    </div>
+                    <hr/>
+                    <div class="shadow" v-for="course in courses"
+                         style="width: 180px;margin-top: 5px;margin-left:8px;height: 150px;background-color: #fff;"
+                         v-on:click="toCourse(course.cid)">
+                        <img v-bind:src="course.img" width="180px" height="88px" style="border-radius: 4px;float: left">
+                        <div style="height: 53px;padding: 5px;">
+                            <p style="width:180px;font-size: 12px;height:15px;overflow: hidden;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;word-break: break-all;">
+                                {{course.cname}}
+                            </p>
+                            <div>
+                            <span style="font-size: 12px;">
+                                <template v-if="course.free ==1 ">
+                                  免费
+                                </template>
+                                <template v-else>
+                                    ￥{{course.price}}
+                                     <span style="font-size: 12px;padding-left: 10px;">
+                                         <template v-if="course.svipFree == 1">
+                                             SVIP免费
+                                         </template>
+                                         <template v-else>
+                                             SVIP:￥{{course.sPrice}}
+                                         </template>
+                                     </span>
+                                </template>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <hr/>
-
+            </div>
+            <div class="rightDiv" style="display: none" id="clickCourseDiv">
+                <div class="col-md-10 " style="background-color: #fff;height: 600px;margin-top: 30px;">
+                    <div style="text-align: center;width: 100px;padding-top: 20px;">
+                        <span style="color: red">点赞课程</span>
+                    </div>
+                    <hr/>
+                    <div class="shadow" v-for="course in courses"
+                         style="width: 180px;margin-top: 5px;margin-left:8px;height: 150px;background-color: #fff;"
+                         v-on:click="toCourse(course.cid)">
+                        <img v-bind:src="course.img" width="180px" height="88px" style="border-radius: 4px;float: left">
+                        <div style="height: 53px;padding: 5px;">
+                            <p style="width:180px;font-size: 12px;height:15px;overflow: hidden;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;word-break: break-all;">
+                                {{course.cname}}
+                            </p>
+                            <div>
+                            <span style="font-size: 12px;">
+                                <template v-if="course.free ==1 ">
+                                  免费
+                                </template>
+                                <template v-else>
+                                    ￥{{course.price}}
+                                     <span style="font-size: 12px;padding-left: 10px;">
+                                         <template v-if="course.svipFree == 1">
+                                             SVIP免费
+                                         </template>
+                                         <template v-else>
+                                             SVIP:￥{{course.sPrice}}
+                                         </template>
+                                     </span>
+                                </template>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rightDiv" style="display: none" id="showPersonalDiv">
+                <div class="col-md-10 " style="background-color: #fff;height: 600px;margin-top: 30px;">
+                    <div style="text-align: center;width: 100px;padding-top: 20px;">
+                        <span style="color: red">个人资料</span>
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+            <div class="rightDiv" style="display: none" id="updatePassDiv">
+                <div class="col-md-10 " style="background-color: #fff;height: 600px;margin-top: 30px;">
+                    <div style="text-align: center;width: 100px;padding-top: 20px;">
+                        <span style="color: red">修改密码</span>
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+            <div class="rightDiv" style="display: none">
+                <div class="col-md-10 " style="background-color: #fff;height: 600px;margin-top: 30px;">
+                    <div style="text-align: center;width: 100px;padding-top: 20px;">
+                        <span style="color: red">修改密码</span>
+                    </div>
+                    <hr/>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+    var vu = new Vue({
+        el: "#bd",
+        data: {
+            courses: {},
+        },
+        mounted() {
+            axios.get('/userByCourse/getByUid?uid=' + $.cookie("user_uid"))
+                .then(function (response) {
+                    vu.courses = response.data.data;
+                })
+        },
+        methods: {
+            byCourse: function (event) {
+                vu.$options.methods.hideDiv();
+                $("#byCourseDiv").removeAttr("style")
+                $(event.currentTarget).attr("style", "color:red");
+                axios.get('/userByCourse/getByUid?uid=' + $.cookie("user_uid"))
+                    .then(function (response) {
+                        vu.courses = response.data.data;
+                    })
+            },
+            clickCourse: function (event) {
+                vu.$options.methods.hideDiv();
+                $("#clickCourseDiv").removeAttr("style")
+                $(event.currentTarget).attr("style", "color:red");
+                axios.get('/userGiveLikeCourse/getByUid?uid=' + $.cookie("user_uid"))
+                    .then(function (response) {
+                        vu.courses = response.data.data;
+                    })
+            },
+            showPersonal: function (event) {
+                vu.$options.methods.hideDiv();
+                $("#showPersonalDiv").removeAttr("style")
+                $(event.currentTarget).attr("style", "color:red");
+            },
+            updatePass: function (event) {
+                vu.$options.methods.hideDiv();
+                $("#updatePassDiv").removeAttr("style")
+                $(event.currentTarget).attr("style", "color:red");
+            },
+            bySvip: function () {
+                if (confirm("您确定要购买vip吗?")) {
+                    var data = new FormData();
+                    data.append("uid", $.cookie("user_uid"));
+                }
+            },
+            hideDiv: function () {
+                $(".rightDiv").attr("style", "display:none");
+                $(".leftMenu").removeAttr("style")
+            },
+            toCourse: function (cid) {
+                window.open('/course.html?cid=' + cid, '_blank')
+            },
+        },
+    });
 </script>
 </body>
 

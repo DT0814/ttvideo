@@ -3,6 +3,7 @@ package com.xawl.ttvideo.service;
 import com.xawl.ttvideo.dao.CourseDao;
 import com.xawl.ttvideo.dao.UserRecommendDao;
 import com.xawl.ttvideo.pojo.Course;
+import com.xawl.ttvideo.pojo.Result;
 import com.xawl.ttvideo.pojo.UserRecommend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -187,5 +188,11 @@ public class CourseService {
         list.clear();
         list.addAll(newList);
         System.out.println(" remove duplicate " + list);
+    }
+
+    public List<Course> findByCids(Integer[] arr) {
+        List<Integer> list = Arrays.asList(arr);
+        List<Course> allById = dao.findAllById(list);
+        return allById;
     }
 }

@@ -81,7 +81,7 @@
                             <div>
                                 <div class="padlr_10 h46 clearfix fl  btn "
                                      style="text-align: left;width: 710px">
-                                    <div class="courseItem" v-on:click="play(res.url)">
+                                    <div class="courseItem" v-on:click="play(res.cid,res.url)">
                                         <p class=" fl font_hidden " style="width: 710px">
                                             <span class="glyphicon glyphicon-play-circle"></span>
                                             <span class="font_hidden">第{{index+1}}讲</span>
@@ -241,7 +241,6 @@
             resources: {},
         },
         mounted() {
-
             var cid = document.location.search.substring(document.location.search.lastIndexOf('=') + 1)
             var start = $('#rating-input');
             start.rating({
@@ -296,12 +295,47 @@
 
         },
         methods: {
-            play: function (src) {
-                var curtime = player.currentTime();
-                player.src(src);
-                player.load();
-                player.currentTime(curtime);
-                player.play();
+            play: function (cid, src) {
+                if ($.cookie("user_uid") != null) {
+                    if (vu.course.free || (vu.course.svipFree && $.cookie("user_svip"))) {
+                        var curtime = player.currentTime();
+                        player.src(src);
+                        player.load();
+                        player.currentTime(curtime);
+                        player.play();
+                    } else {
+                        axios.get('/userByCourse/isBy?cid=' + cid + "&uid=" + $.cookie("user_uid"))
+                            .then(function (response) {
+                                var b = response.data.data;
+                                if (!b) {
+                                    if (confirm("请于购买后观看,点击确定购买本课程")) {
+                                        var data = new FormData();
+                                        data.append("uid", $.cookie("user_uid"));
+                                        data.append("cid", cid);
+                                        axios.post('/userByCourse/by', data)
+                                            .then(function (response) {
+                                                var result = response.data;
+                                                if (result.code == 200) {
+                                                    alert("购买成功");
+                                                } else {
+                                                    alert(result.msg)
+                                                }
+                                            })
+                                    }
+                                } else {
+                                    var curtime = player.currentTime();
+                                    player.src(src);
+                                    player.load();
+                                    player.currentTime(curtime);
+                                    player.play();
+                                }
+                            });
+                    }
+                } else {
+                    if (confirm("您未登录,点击确定去登录")) {
+                        window.open('/login.html')
+                    }
+                }
             },
             toCourse: function (cid) {
                 window.open('/course.html?cid=' + cid)

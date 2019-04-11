@@ -64,4 +64,14 @@ public class UserController {
             return Result.err(401, "评分失败");
         }
     }
+
+    @PostMapping("/bySvip")
+    public Result bySvip(Integer uid) {
+        boolean b = service.bySvip(uid);
+        if (b) {
+            return Result.success(null);
+        } else {
+            return Result.err(401, "购买失败");
+        }
+    }
 }

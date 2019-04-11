@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml"
+      xmlns:v-bing="http://www.w3.org/1999/xhtml">
 <head>
     <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
     <link rel="stylesheet" href="css/index.css" type="text/css">
@@ -97,8 +98,9 @@
                          </span>
                     </template>
                 </span>
-                    <span @click.stop class=" glyphicon glyphicon-thumbs-up" style="float: right"
-                          v-on:click="giveLike(course.cid)"></span>
+                    <span @click.stop class="glyphicon glyphicon-thumbs-up clickSpan" style="float: right"
+                          v-bind:id="course.cid+'span'" v-on:click="giveLike(course.cid)"
+                          onclick="giveLike(this)"></span>
                 </div>
             </div>
         </div>
@@ -174,85 +176,87 @@
 </body>
 <script>
     var vu = new Vue({
-            el: "#index",
-            data: {
-                catalogs: {},
-                ExcellentCourse: {},
-                newCourse: {},
-                courses: {},
-            },
-            mounted() {
-                axios.get('/course/findExcellentCourse').then(function (response) {
+        el: "#index",
+        data: {
+            catalogs: {},
+            ExcellentCourse: {},
+            newCourse: {},
+            courses: {},
+        },
+        mounted() {
+            axios.get('/course/findExcellentCourse').then(function (response) {
+                var data = response.data;
+                vu.ExcellentCourse = data.data;
+            });
+            axios.get('/course/newCourse').then(function (response) {
+                var data = response.data;
+                vu.newCourse = data.data;
+            });
+            axios.get('/catalog/find')
+                .then(function (response) {
                     var data = response.data;
-                    vu.ExcellentCourse = data.data;
+                    vu.catalogs = data.data;
                 });
-                axios.get('/course/newCourse').then(function (response) {
-                    var data = response.data;
-                    vu.newCourse = data.data;
-                });
-                axios.get('/catalog/find')
-                    .then(function (response) {
-                        var data = response.data;
-                        vu.catalogs = data.data;
-                    });
 
-                //轮播切换
-                var div = $(".point")[0];
-                var points = $(div).find("span");
-                var imges = $(".chart");
-                var n = 0;
-                points[0].style.backgroundColor = "gray";
-                imges[0].style.zIndex = 3;
-                for (var i = 0; i < points.length; i++) {
-                    points[i].index = i;
-                    points[i].onclick = function () {
-                        for (var j = 0; j < imges.length; j++) {
-                            imges[j].style.zIndex = 0;
-                            points[j].style.backgroundColor = "#FFF";
-                        }
-                        n = i;
-                        this.style.backgroundColor = "gray";
-                        imges[this.index].style.zIndex = 3;
-                    }
-                }
-                setInterval(function () {
+            //轮播切换
+            var div = $(".point")[0];
+            var points = $(div).find("span");
+            var imges = $(".chart");
+            var n = 0;
+            points[0].style.backgroundColor = "gray";
+            imges[0].style.zIndex = 3;
+            for (var i = 0; i < points.length; i++) {
+                points[i].index = i;
+                points[i].onclick = function () {
                     for (var j = 0; j < imges.length; j++) {
                         imges[j].style.zIndex = 0;
                         points[j].style.backgroundColor = "#FFF";
                     }
-                    points[n % 3].style.backgroundColor = "gray";
-                    imges[n % 3].style.zIndex = 1;
-                    n++;
-
-                }, 2000);
-
-            },
-            methods: {
-                enter: function (catalog) {
-                    $("#catalogShow").css("display", "block");
-                    axios.get('/course/findByCaid?caid=' + catalog.cid)
-                        .then(function (response) {
-                            console.log(response.data);
-                            vu.courses = response.data.data;
-                        });
-                },
-                type: function () {
-                    $("#catalogShow").css("display", "none");
-                },
-                toCourse: function (cid) {
-                    window.open('/course.html?cid=' + cid, '_blank')
-                },
-                giveLike: function (cid) {
-                    console.log(cid)
-                    var data = new FormData();
-                    data.append("cid", cid);
-                    axios.post('/course/giveLike', data)
-                        .then(function (response) {
-                            console.log(response.data);
-                        });
+                    n = i;
+                    this.style.backgroundColor = "gray";
+                    imges[this.index].style.zIndex = 3;
                 }
             }
-        })
-    ;
+            setInterval(function () {
+                for (var j = 0; j < imges.length; j++) {
+                    imges[j].style.zIndex = 0;
+                    points[j].style.backgroundColor = "#FFF";
+                }
+                points[n % 3].style.backgroundColor = "gray";
+                imges[n % 3].style.zIndex = 1;
+                n++;
+
+            }, 2000);
+
+        },
+        methods: {
+            enter: function (catalog) {
+                $("#catalogShow").css("display", "block");
+                axios.get('/course/findByCaid?caid=' + catalog.cid)
+                    .then(function (response) {
+                        console.log(response.data);
+                        vu.courses = response.data.data;
+                    });
+            },
+            type: function () {
+                $("#catalogShow").css("display", "none");
+            },
+            toCourse: function (cid) {
+                window.open('/course.html?cid=' + cid, '_blank')
+            },
+            giveLike: function (cid) {
+                var data = new FormData();
+                data.append("cid", cid);
+                data.append("uid", $.cookie('user_uid'));
+                axios.post('/course/giveLike', data)
+                    .then(function (response) {
+                    });
+            }
+        }
+    });
+
+    function giveLike(ele) {
+        $(ele).attr("style", "float: right;color:red")
+    }
 </script>
 </html>

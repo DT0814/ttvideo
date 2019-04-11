@@ -29,4 +29,16 @@ public class UserService {
         dao.saveAndFlush(user);
         return null;
     }
+
+    public boolean bySvip(Integer uid) {
+        Optional<User> byId = dao.findById(uid);
+        if (byId.isPresent()) {
+            User user = byId.get();
+            user.setIsvip(true);
+            dao.saveAndFlush(user);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

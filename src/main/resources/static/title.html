@@ -40,8 +40,12 @@
                 <li v-on:click="toIndex()" style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">首页</li>
                 <li v-on:click="toCourse()" style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">课程中心
                 </li>
-                <li style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">SVIP会员</li>
-                <li style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">讲师招募</li>
+                <li v-on:click="toSvip()" style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">
+                    SVIP会员
+                </li>
+                <li v-on:click="toLecturerRecruitment()"
+                    style="float: left;font-size: 16px;margin-left: 30px;cursor:pointer;">讲师招募
+                </li>
             </ul>
             <div class="row col-md-3" style="margin-top: 55px;">
                 <input id="cname" type="text" class="col-md-10" placeholder="请输入搜索内容"
@@ -98,6 +102,12 @@
             },
             toCourse: function () {
                 window.open('/courseSearch.html', '_top');
+            },
+            toSvip: function () {
+                window.open('/svip.html', '_top');
+            },
+            toLecturerRecruitment: function () {
+                window.open('/lecturerRecruitment.html', '_top');
             },
             select: function () {
                 window.open('/courseSearch.html?cname=' + $("#cname").val(), '_top')

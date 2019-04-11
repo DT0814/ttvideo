@@ -1,0 +1,44 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+li {
+    list-style: none;
+}
+
+.menu li:hover {
+    color: #F00;
+}
+
+.leftMenu:hover {
+    color: red;
+}
+
+.leftMenu {
+    margin: 20px;
+    text-align: center;
+    cursor: pointer
+}
+
+.person_content .person_title[data-v-ecce6c28] {
+    font-size: 14px;
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    line-height: 100px;
+}
+
+.apply_btn[data-v-ecce6c28] {
+    display: inline-block;
+    width: 160px;
+    line-height: 36px;
+    color: #fff;
+    background: #d51423;
+    text-align: center;
+    border-radius: 6px;
+    position: relative;
+    left: 50%;
+    margin-left: -80px;
+    margin-top: 10px;
+}

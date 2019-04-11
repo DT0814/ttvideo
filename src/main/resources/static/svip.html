@@ -1,0 +1,1316 @@
+<!doctype html>
+<html data-n-head-ssr data-n-head="" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title data-n-head="true">TTVideo</title>
+    <meta data-n-head="true" charset="utf-8"/>
+    <meta data-n-head="true" name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta data-n-head="true" http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta data-n-head="true" data-hid="keywords" name="keywords"/>
+    <meta data-n-head="true" data-hid="description" name="description"/>
+    <script data-n-head="true" src="https://player.polyv.net/script/polyvplayer.min.js"></script>
+    <script src="js/jquery-1.12.4.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/jquery.gallery.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <meta charset="UTF-8">
+    <style data-vue-ssr-id="6ea6ef37:0 fd547dac:0 371b8fbf:0 03f57edb:0 4e3737f4:0">
+        @charset "UTF-8";
+        abbr, address, article, aside, audio, b, blockquote, body, canvas, caption, cite, code, dd, del, details, dfn, div, dl, dt, em, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, p, pre, q, samp, section, small, span, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, ul, var, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            outline: 0;
+            font-size: 100%;
+            vertical-align: baseline;
+            background: transparent;
+            list-style-type: none
+        }
+
+        body, html {
+            font-family: tahoma, 微软雅黑, arial, "\5B8B\4F53"
+        }
+
+        body {
+            min-width: 1200px;
+            font-size: 12px;
+            line-height: 1.2;
+            background-color: #f5f5f5
+        }
+
+        :focus {
+            outline: 1
+        }
+
+        article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+            display: block
+        }
+
+        nav ul {
+            list-style: none
+        }
+
+        blockquote, q {
+            quotes: none
+        }
+
+        blockquote:after, blockquote:before, q:after, q:before {
+            content: "";
+            content: none
+        }
+
+        a {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            vertical-align: baseline;
+            text-decoration: none;
+            background: transparent
+        }
+
+        a:hover {
+            text-decoration: underline
+        }
+
+        ins {
+            background-color: #ff9;
+            color: #000;
+            text-decoration: none
+        }
+
+        mark {
+            color: #c60
+        }
+
+        del {
+            text-decoration: line-through
+        }
+
+        abbr[title], dfn[title] {
+            border-bottom: 1px dotted #000;
+            cursor: help
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0
+        }
+
+        hr {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid #ccc;
+            margin: 1em 0;
+            padding: 0
+        }
+
+        input, select {
+            vertical-align: middle
+        }
+
+        input, select, textarea {
+            -webkit-tap-highlight-color: transparent;
+            border: 1px solid #ccc;
+            padding: 0;
+            border-radius: 0;
+            outline: none;
+            font-size: 12px
+        }
+
+        em, i {
+            font-style: normal
+        }
+
+        img {
+            max-width: 100%;
+            border: none
+        }
+
+        @font-face {
+            font-family: iconfont;
+            src: url(//at.alicdn.com/t/font_724588_rvzy3gp8d6.eot);
+            src: url(//at.alicdn.com/t/font_724588_rvzy3gp8d6.eot#iefix) format("embedded-opentype"), url(//at.alicdn.com/t/font_724588_rvzy3gp8d6.woff2) format("woff2"), url(//at.alicdn.com/t/font_724588_rvzy3gp8d6.woff) format("woff"), url(//at.alicdn.com/t/font_724588_rvzy3gp8d6.ttf) format("truetype"), url(//at.alicdn.com/t/font_724588_rvzy3gp8d6.svg#iconfont) format("svg")
+        }
+
+        .iconfont {
+            font-family: iconfont !important;
+            font-size: 16px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale
+        }
+
+        .v_icon {
+            vertical-align: middle
+        }
+
+        .cl:after, .clearfix:after, .container:after {
+            content: "";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden
+        }
+
+        .cl:before, .clearfix:before, .container:before {
+            content: "";
+            display: table
+        }
+
+        .cl, .clearfix {
+            *zoom: 1
+        }
+
+        a {
+            color: #333
+        }
+
+        a:hover {
+            color: #d51423
+        }
+
+        .fl {
+            float: left
+        }
+
+        .fr {
+            float: right
+        }
+
+        .center {
+            text-align: center
+        }
+
+        .hide {
+            display: none !important
+        }
+
+        .show {
+            display: block !important
+        }
+
+        .mgt80 {
+            margin-top: 80px
+        }
+
+        .mgt70 {
+            margin-top: 70px
+        }
+
+        .mgt60 {
+            margin-top: 60px
+        }
+
+        .mgt50 {
+            margin-top: 50px
+        }
+
+        .mgt40 {
+            margin-top: 40px
+        }
+
+        .mgt30 {
+            margin-top: 30px
+        }
+
+        .mgt20 {
+            margin-top: 20px
+        }
+
+        .mgt10 {
+            margin-top: 10px
+        }
+
+        .mgt6 {
+            margin-top: 6px
+        }
+
+        .mgt3 {
+            margin-top: 3px
+        }
+
+        .mgr10 {
+            margin-right: 10px
+        }
+
+        .mgr40 {
+            margin-right: 40px
+        }
+
+        .mgl10 {
+            margin-left: 10px
+        }
+
+        .mgl20 {
+            margin-left: 20px
+        }
+
+        .mgl40 {
+            margin-left: 40px
+        }
+
+        .pad10 {
+            padding: 10px
+        }
+
+        .pad15 {
+            padding: 15px
+        }
+
+        .pad20 {
+            padding: 20px
+        }
+
+        .padb_10 {
+            padding-bottom: 10px
+        }
+
+        .padb_20 {
+            padding-bottom: 20px
+        }
+
+        .padlr_10 {
+            padding-left: 10px;
+            padding-right: 10px
+        }
+
+        .padlr_20 {
+            padding-left: 20px;
+            padding-right: 20px
+        }
+
+        .padl_10 {
+            padding-left: 10px
+        }
+
+        .padl_20 {
+            padding-left: 20px
+        }
+
+        .border_t {
+            border-top: 1px solid #d51423
+        }
+
+        .border_b {
+            border-bottom: 1px solid #f5f5f5
+        }
+
+        .border_l {
+            border-left: 1px solid #ccc
+        }
+
+        .icon_qq {
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUEyMTlGNzE5NkMxMTFFN0JBOUZDMjY5NTdBQjVFMjQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUEyMTlGNzI5NkMxMTFFN0JBOUZDMjY5NTdBQjVFMjQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QTIxOUY2Rjk2QzExMUU3QkE5RkMyNjk1N0FCNUUyNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QTIxOUY3MDk2QzExMUU3QkE5RkMyNjk1N0FCNUUyNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PrMNmh4AAAC4SURBVHjaYvz//z8DOYAFxmBkZATTISEh/EBqKogJlVoDxNlr1qz5COLALGLBYtg6IHZC4kcDsSQQOyMrYoSZALIRaJslkHkMh+usgLYeh6lnQpM0xuMtFDl0jQF4NAZg1Qh0JhuQUsejUR2qBsPGUiCWwaNRBqoGQ2MWEdGXhU0jLxDfw6PpHlQNhkZVIG7Ao7EBqgZrPJ4HMg1waLwAjEdDXPH4DEp/AuIpUPwJTQ7VRlIBQIABALPbM/5DCE8EAAAAAElFTkSuQmCC) no-repeat 50%
+        }
+
+        .icon_qq, .icon_tel {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            vertical-align: text-bottom
+        }
+
+        .icon_tel {
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTI5NEZDOTU5NkMxMTFFN0EwOTk5NTRBMkExQzU4MDMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTI5NEZDOTY5NkMxMTFFN0EwOTk5NTRBMkExQzU4MDMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5Mjk0RkM5Mzk2QzExMUU3QTA5OTk1NEEyQTFDNTgwMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5Mjk0RkM5NDk2QzExMUU3QTA5OTk1NEEyQTFDNTgwMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgFT9qgAAADiSURBVHjaYvz//z8DOYAFRDAyMjKEhISUA5k1QFy1Zs2ayfg0gSxjBBGhoaEJQP58JLk0oObZ+DQyQdlT0eTaCDkVpvEJkthfIO4nVuMyJLF0oDOJtnEWEP+EssWICVWwRqANz4FUD1SsDhjCVsTaCALtQHwPiDmAeDuyZiC7CohfA3EqTAwcHaB4hCrQA1KHgZgPiH8AcRMQvwLimUDMDNWTt3r16skoGpE0rwdiJRyu/ALUyMuELgr07yUgBdLcihRgyKAFw6noAGi7JCgVAXEUEMsAcTbQ4AXwJEcOAAgwAIIyUhsdIr9sAAAAAElFTkSuQmCC) no-repeat 50%
+        }
+
+        .icon_email {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            vertical-align: text-bottom;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OEIwODU5Qjg5NkMxMTFFN0IxN0FFQUVEODE5MjFERTMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OEIwODU5Qjk5NkMxMTFFN0IxN0FFQUVEODE5MjFERTMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4QjA4NTlCNjk2QzExMUU3QjE3QUVBRUQ4MTkyMURFMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4QjA4NTlCNzk2QzExMUU3QjE3QUVBRUQ4MTkyMURFMyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjhuaUwAAADpSURBVHjaYvz//z8DOYCJgUzAAiJCQ0PPAilDIGYE4k841PIBMch551evXm3MAhU0AuJrQCwExBI4NL4A4ndQtShOvQ/EcUD8HoumN0AcBcQP0P34E4i9gdgXiMuB+DeSph9AXATEwUDsBeXDNcIU5gKxFBAXQvl/gTgHiDWAOBsq9gceOGiAHYiPAXESNDAuAbEmruhghdKTof7YC8RsQCwCxPuA+CoQz0COCRYkW7YB8QYgXgXEgkgKQaAdiCOAWBmIXdGdqgDEy4BYGIvzxaFyH1ESABCcIyIBSEINAKllYKR7WgUIMABZ4DC/1exzuAAAAABJRU5ErkJggg==) no-repeat 50%
+        }
+
+        .relative_box {
+            position: relative
+        }
+
+        .radius_box {
+            border-radius: 8px;
+            overflow: hidden
+        }
+
+        .box {
+            display: -moz-flex;
+            display: -ms-flex;
+            display: -o-flex;
+            display: flex
+        }
+
+        .flex {
+            flex: 1
+        }
+
+        .box-pack {
+            -ms-box-pack: center;
+            -o-box-pack: center;
+            box-pack: center;
+            -ms-box-align: center;
+            -o-box-align: center;
+            box-align: center
+        }
+
+        .box-sizing {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box
+        }
+
+        .mask {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 888;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, .5)
+        }
+
+        .container {
+            width: 1200px;
+            margin: 0 auto
+        }
+
+        .container.mgt30 {
+            margin-top: 30px
+        }
+
+        .font_hidden {
+            white-space: nowrap
+        }
+
+        .font_hidden, .font_hidden_2 {
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .font_hidden_2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2
+        }
+
+        .font_b {
+            font-weight: 650
+        }
+
+        .font_12 {
+            font-size: 12px
+        }
+
+        .font_14 {
+            font-size: 14px
+        }
+
+        .font_16 {
+            font-size: 16px
+        }
+
+        .font_18 {
+            font-size: 18px
+        }
+
+        .font_20 {
+            font-size: 20px
+        }
+
+        .font_24 {
+            font-size: 24px
+        }
+
+        .font_28 {
+            font-size: 28px
+        }
+
+        .font_36 {
+            font-size: 36px
+        }
+
+        .b_fff {
+            background: #fff
+        }
+
+        .c_333 {
+            color: #333
+        }
+
+        .c_666 {
+            color: #666
+        }
+
+        .c_999 {
+            color: #999
+        }
+
+        .c_ccc {
+            color: #ccc
+        }
+
+        .c_245 {
+            color: #f5f5f5
+        }
+
+        .c_fff {
+            color: #fff
+        }
+
+        .c_gold {
+            color: #ca9e70
+        }
+
+        .c_red {
+            color: #d51423
+        }
+
+        .c_orange {
+            color: #ec7e11
+        }
+
+        .c_blue {
+            color: #107ec4
+        }
+
+        .c_green {
+            color: green
+        }
+
+        .crumb {
+            padding: 10px;
+            line-height: 30px
+        }
+
+        .crumb span {
+            color: #888
+        }
+
+        .btn {
+            cursor: pointer
+        }
+
+        .solid_btn {
+            display: inline-block;
+            line-height: 34px;
+            height: 34px;
+            min-width: 110px;
+            border-radius: 3px;
+            border: 1px solid #d51423;
+            text-align: center;
+            cursor: pointer
+        }
+
+        .solid_btn, .solid_btn:hover {
+            background-color: #d51423;
+            color: #fff
+        }
+
+        .solid_btn:disabled {
+            border-color: #ccc;
+            background-color: #ccc
+        }
+
+        .hollow_btn {
+            display: inline-block;
+            text-align: center;
+            line-height: 34px;
+            height: 34px;
+            min-width: 110px;
+            border-radius: 3px;
+            color: #d51423;
+            border: 1px solid #d51423;
+            background-color: #fff;
+            cursor: pointer
+        }
+
+        .hollow_btn:hover {
+            background-color: #e01c2b;
+            color: #fff
+        }
+
+        .collect_btn {
+            color: #666;
+            float: right;
+            height: 36px;
+            line-height: 36px;
+            margin-right: 10px;
+            font-size: 14px
+        }
+
+        .collect_btn:hover {
+            color: #d51423;
+            text-decoration: none
+        }
+
+        .collect_btn.noposi {
+            line-height: 66px;
+            height: 66px
+        }
+
+        .collect_btn.course {
+            left: 160px
+        }
+
+        .collect_btn.share {
+            left: 230px
+        }
+
+        .collect_btn.c_red {
+            color: #d51423
+        }
+
+        .atten_btn {
+            margin-left: 10px;
+            color: #666;
+            font-weight: 400;
+            float: right
+        }
+
+        .atten_btn:hover {
+            color: #d51423;
+            text-decoration: none
+        }
+
+        .atten_btn.c_red {
+            color: #d51423
+        }
+
+        .loading_panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 99;
+            background-color: hsla(0, 0%, 100%, .6)
+        }
+
+        .loading_panel .svg_icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 70px;
+            height: 70px;
+            margin-left: -35px;
+            margin-top: -35px;
+            font-size: 60px;
+            -webkit-animation: loading 2s linear infinite;
+            animation: loading 2s linear infinite
+        }
+
+        .loading_panel .svg_icon .path {
+            -webkit-animation: loading-path 1.5s ease-in-out infinite;
+            animation: loading-path 1.5s ease-in-out infinite;
+            stroke-dasharray: 90, 150;
+            stroke-dashoffset: 0;
+            stroke-width: 2px;
+            stroke: rgba(0, 0, 0, .6);
+            stroke-linecap: round
+        }
+
+        @-webkit-keyframes loading {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg)
+            }
+            to {
+                -webkit-transform: rotate(1turn);
+                transform: rotate(1turn)
+            }
+        }
+
+        @keyframes loading {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg)
+            }
+            to {
+                -webkit-transform: rotate(1turn);
+                transform: rotate(1turn)
+            }
+        }
+
+        @-webkit-keyframes loading-path {
+            0% {
+                stroke-dasharray: 0, 120;
+                stroke-dashoffset: 0
+            }
+            40% {
+                stroke-dasharray: 90, 120;
+                stroke-dashoffset: -40
+            }
+            to {
+                stroke-dasharray: 90, 120;
+                stroke-dashoffset: -120
+            }
+        }
+
+        @keyframes loading-path {
+            0% {
+                stroke-dasharray: 0, 120;
+                stroke-dashoffset: 0
+            }
+            40% {
+                stroke-dasharray: 90, 120;
+                stroke-dashoffset: -40
+            }
+            to {
+                stroke-dasharray: 90, 120;
+                stroke-dashoffset: -120
+            }
+        }
+
+        .nuxt-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            width: 0;
+            opacity: 1;
+            transition: width .1s, opacity .4s;
+            background-color: #fff;
+            z-index: 999999
+        }
+
+        .nuxt-progress.nuxt-progress-notransition {
+            transition: none
+        }
+
+        .nuxt-progress-failed {
+            background-color: red
+        }
+
+        html {
+            font-family: Source Sans Pro, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+            font-size: 16px;
+            word-spacing: 1px;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            box-sizing: border-box
+        }
+
+        *, :after, :before {
+            box-sizing: border-box;
+            margin: 0
+        }
+
+        .button--green {
+            display: inline-block;
+            border-radius: 4px;
+            border: 1px solid #3b8070;
+            color: #3b8070;
+            text-decoration: none;
+            padding: 10px 30px
+        }
+
+        .button--green:hover {
+            color: #fff;
+            background-color: #3b8070
+        }
+
+        .button--grey {
+            display: inline-block;
+            border-radius: 4px;
+            border: 1px solid #35495e;
+            color: #35495e;
+            text-decoration: none;
+            padding: 10px 30px;
+            margin-left: 15px
+        }
+
+        .button--grey:hover {
+            color: #fff;
+            background-color: #35495e
+        }
+
+        .vip_page a[data-v-b26926c8] {
+            text-decoration: none
+        }
+
+        .vip_page .v_header[data-v-b26926c8] {
+            background: #333;
+            color: #ccc
+        }
+
+        .vip_page .v_header[data-v-b26926c8], .vip_page .v_header .h_30[data-v-b26926c8] {
+            height: 30px;
+            line-height: 30px
+        }
+
+        .vip_page .v_header a[data-v-b26926c8] {
+            color: #ccc;
+            margin: 0 6px
+        }
+
+        .vip_page .v_header a.c_gold[data-v-b26926c8] {
+            color: #ca9e70
+        }
+
+        .vip_page .header_img[data-v-b26926c8] {
+            height: 450px;
+            background: url(./sivpImg/a2f0109.jpg) no-repeat 50%;
+            color: #d1b388
+        }
+
+        .vip_page .vip_info[data-v-b26926c8] {
+            position: relative;
+            width: 1080px;
+            margin: -235px auto 0
+        }
+
+        .vip_page .vip_info.w1120[data-v-b26926c8] {
+            width: 1120px
+        }
+
+        .vip_page .vip_info .free_btn[data-v-b26926c8] {
+            position: absolute;
+            top: -200px;
+            right: 30px;
+            color: #ca9e70;
+            font-size: 14px;
+            height: 36px;
+            line-height: 36px;
+            padding: 0 10px;
+            cursor: pointer;
+            background: hsla(0, 0%, 100%, .3);
+            border-radius: 6px
+        }
+
+        .vip_page .vip_info .free_btn img[data-v-b26926c8] {
+            width: 20px;
+            position: relative;
+            top: 5px
+        }
+
+        .vip_page .vip_info .free_btn.is_course[data-v-b26926c8] {
+            right: 200px
+        }
+
+        .vip_page .vip_info .index_box[data-v-b26926c8] {
+            padding: 0 300px 20px
+        }
+
+        .vip_page .vip_info .index_box.one[data-v-b26926c8] {
+            padding: 0 220px 20px
+        }
+
+        .vip_page .vip_info .index_box.two[data-v-b26926c8] {
+            padding: 0 140px 20px
+        }
+
+        .vip_page .vip_info .index_box.three[data-v-b26926c8] {
+            padding: 0 60px 20px
+        }
+
+        .vip_page .vip_info .card_box[data-v-b26926c8] {
+            width: 910px;
+            margin-left: 85px
+        }
+
+        .vip_page .vip_info .text_bg[data-v-b26926c8] {
+            padding-left: 20px;
+            width: 890px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            background: #fff url(./sivpImg/5b32544.jpg) no-repeat bottom;
+            box-shadow: 0 0 3px rgba(0, 0, 0, .2)
+        }
+
+        .vip_page .vip_info .show_box[data-v-b26926c8] {
+            width: 300px;
+            height: 213px;
+            background: #ca9e70
+        }
+
+        .vip_page .vip_info .show_box img[data-v-b26926c8] {
+            width: 100%;
+            height: 100%;
+            display: block
+        }
+
+        .vip_page .vip_info .pay_box[data-v-b26926c8] {
+            margin-top: 1px;
+            padding: 30px 0;
+            width: 590px;
+            height: 211px;
+            background: #ca9e70
+        }
+
+        .vip_page .right_item[data-v-b26926c8] {
+            width: 120px;
+            float: left;
+            text-decoration: none;
+            text-align: center;
+            margin: 0 20px
+        }
+
+        .vip_page .right_item img[data-v-b26926c8] {
+            width: 50px;
+            height: 50px;
+            display: block;
+            margin: 0 auto 20px
+        }
+
+        .vip_page .pay_item[data-v-b26926c8] {
+            margin-left: 40px;
+            width: 528px;
+            height: 155px;
+            border-radius: 6px;
+            overflow: hidden
+        }
+
+        .vip_page .pay_item .card[data-v-b26926c8] {
+            padding: 20px;
+            width: 248px;
+            height: 155px;
+            background: url(./sivpImg/3aa06ff.png) no-repeat 50%
+        }
+
+        .vip_page .pay_item .vip_price[data-v-b26926c8] {
+            width: 240px;
+            height: 155px;
+            padding: 14px 20px 6px;
+            background: #fff;
+            position: relative
+        }
+
+        .vip_page .pay_item .vip_price .vip_btn[data-v-b26926c8] {
+            position: absolute;
+            bottom: 6px;
+            left: 20px;
+            width: 200px;
+            height: 36px;
+            background: #ca9e70;
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer
+        }
+
+        .vip_page .pay_item .vip_price .vip_time[data-v-b26926c8] {
+            position: absolute;
+            bottom: 52px
+        }
+
+        .vip_page .h100[data-v-b26926c8] {
+            height: 100px;
+            padding-bottom: 30px
+        }
+
+        .vip_page .lh30[data-v-b26926c8] {
+            line-height: 30px
+        }
+
+        .vip_page .lh60[data-v-b26926c8] {
+            line-height: 60px
+        }
+
+        .vip_page .pdb30[data-v-b26926c8] {
+            padding-bottom: 30px
+        }
+
+        .vip_page .vip_icon[data-v-b26926c8] {
+            width: 14px;
+            height: 13px;
+            position: relative;
+            top: 1px
+        }
+
+        .i_footer {
+            background: #333;
+            padding-top: 60px
+        }
+
+        .i_footer .footer_content {
+            width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #666
+        }
+
+        .i_footer .footer_msg {
+            float: left;
+            width: 160px
+        }
+
+        .i_footer .footer_msg img {
+            width: 96px;
+            height: 96px
+        }
+
+        .i_footer .footer_msg li {
+            color: #ccc;
+            font-size: 14px;
+            margin-bottom: 20px
+        }
+
+        .i_footer .footer_msg li a {
+            color: #ccc
+        }
+
+        .i_footer .footer_msg li a:hover {
+            text-decoration: none;
+            color: #fff
+        }
+
+        .i_footer .footer_msg li.m_header {
+            color: #fff;
+            font-size: 18px
+        }
+
+        .i_footer .footer_msg li.m_row {
+            width: 18px;
+            height: 3px;
+            background: #ccc;
+            margin-bottom: 25px
+        }
+
+        .i_footer .m_right {
+            float: right
+        }
+
+        .i_footer .m_right .big_phone {
+            color: #fff;
+            font-size: 18px;
+            margin-left: 56px
+        }
+
+        .i_footer .m_right .small_phone {
+            color: #fff;
+            font-size: 14px;
+            margin-top: 5px;
+            margin-left: 56px
+        }
+
+        .i_footer .m_phone {
+            position: relative
+        }
+
+        .i_footer .m_phone img {
+            width: 46px;
+            height: 43px;
+            position: absolute;
+            top: 0;
+            left: 0
+        }
+
+        .i_footer .qq_btn {
+            margin-top: 10px;
+            position: relative
+        }
+
+        .i_footer .qq_btn img {
+            width: 11px;
+            height: 13px;
+            position: absolute;
+            top: 12px;
+            left: 25px
+        }
+
+        .i_footer .qq_btn a {
+            display: block;
+            width: 113px;
+            height: 36px;
+            padding-left: 15px;
+            background: #d51423;
+            line-height: 36px;
+            color: #fff;
+            border-radius: 5px;
+            text-align: center
+        }
+
+        .i_footer .qq_btn a:hover {
+            text-decoration: none;
+            color: #fff
+        }
+
+        .i_footer .m_test {
+            width: 262px;
+            height: 30px;
+            line-height: 30px;
+            color: #ccc;
+            font-size: 14px;
+            padding-left: 10px;
+            margin-top: 8px
+        }
+
+        .i_footer .m_test img {
+            width: 19px;
+            height: 14px;
+            position: relative;
+            top: 2px
+        }
+
+        .i_footer .friend_link {
+            width: 1200px;
+            margin: 25px auto 0
+        }
+
+        .i_footer .friend_link li {
+            float: left;
+            font-size: 14px
+        }
+
+        .i_footer .friend_link li.link_one {
+            color: #fff;
+            margin-right: 20px
+        }
+
+        .i_footer .friend_link li a {
+            color: #ccc;
+            margin: 0 10px
+        }
+
+        .i_footer .friend_link li a:hover {
+            color: #fff;
+            text-decoration: none
+        }
+
+        .i_footer .copyright {
+            background: #666;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            color: #ccc;
+            margin-top: 25px
+        }
+
+        .i_footer .copyright a {
+            color: #ccc
+        }
+
+        .i_footer .icp_num {
+            line-height: 30px;
+            text-align: center;
+            color: #ccc
+        }
+
+        .i_footer .icp_num .lingke_link {
+            color: #ccc
+        }
+
+        .i_footer .icp_num .lingke_link:hover {
+            text-decoration: underline
+        }
+
+        .i_footer .prn_icon {
+            width: 16px;
+            height: 16px;
+            position: relative;
+            top: 3px
+        }</style>
+</head>
+<body data-n-head="">
+<div data-server-rendered="true" id="bd"><!---->
+    <div id="__layout">
+        <div>
+            <div class="loading_panel" style="display:none;">
+                <svg viewBox="25 25 50 50" class="svg_icon">
+                    <circle cx="50" cy="50" r="20" fill="none" class="path"></circle>
+                </svg>
+            </div>
+            <div class="vip_page" data-v-b26926c8>
+                <div class="v_header" data-v-b26926c8>
+                    <div class="container h_30 clearfix" data-v-b26926c8>
+                        <a v-on:click="toIndex()" class="fl nuxt-link-active" style="cursor:pointer;"
+                           data-v-b26926c8><span class="iconfont" data-v-b26926c8></span>
+                            返回首页
+                        </a>
+                        <div class="fr" data-v-b26926c8><span data-v-b26926c8>|</span>
+                            <template v-if="isLogin">
+                                <spen v-on:click="toPersonal();" style="color: #ccc;cursor:pointer">个人中心</spen>
+                                <spen style="color:#ccc">丨</spen>
+                                <spen v-on:click="toPersonal();" style="color: #ccc;cursor:pointer">{{user_name}}</spen>
+                                <template v-if="user_svip === 'true'">
+                                    <spen style="color: red">svip</spen>
+                                </template>
+                                <spen v-on:click="loginOut();" style="color: #ccc;margin-left: 10px;cursor:pointer">退出
+                                </spen>
+                            </template>
+                            <template v-else>
+                                <spen v-on:click="toLogin();" style="color: #ccc;cursor:pointer">登录</spen>
+                                <spen v-on:click="toLogin();" style="color: #ccc;margin-left: 10px;cursor:pointer">注册
+                                </spen>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+                <div class="header_img clearfix" data-v-b26926c8><p class="font_36 center mgt70" data-v-b26926c8>
+                    超级会员（SVIP） 享专属特权</p>
+                    <p class="font_14 center mgt30" data-v-b26926c8>
+                        海量课程专享，付费课程免费学习，超低折扣课程，资源随心下，一切只为助力您的学习成长。
+                    </p></div>
+                <div class="vip_info" data-v-b26926c8><a href="/list?four=4" target="_blank" class="free_btn"
+                                                         data-v-b26926c8><img src="sivpImg/b071965.png" alt=""
+                                                                              data-v-b26926c8>
+                    查看免费录播课程
+                </a> <!---->
+                    <div class="h100 index_box" data-v-b26926c8>
+                        <div class="right_item" data-v-b26926c8><img src="sivpImg/6d3ae57.png" alt data-v-b26926c8>
+                            <p class="font_16 c_fff" data-v-b26926c8>免费课程</p>
+                            <p class="font_12 mgt10 c_gold" data-v-b26926c8>专属课程免费看</p></div>
+                        <div class="right_item" data-v-b26926c8><img src="sivpImg/1662688.png" alt data-v-b26926c8>
+                            <p class="font_16 c_fff" data-v-b26926c8>超低折扣</p>
+                            <p class="font_12 mgt10 c_gold" data-v-b26926c8>购买课程最低5折起</p></div>
+                        <div class="right_item" data-v-b26926c8><img src="sivpImg/c8a4242.png" alt data-v-b26926c8>
+                            <p class="font_16 c_fff" data-v-b26926c8>活动专享</p>
+                            <p class="font_12 mgt10 c_gold" data-v-b26926c8>平台活动可以折上折</p></div> <!----> <!----> <!---->
+                    </div>
+                    <div class="clearfix card_box mgt30" data-v-b26926c8>
+                        <div class="fl show_box" data-v-b26926c8><img src="sivpImg/08a936d.png" alt data-v-b26926c8>
+                        </div>
+                        <div class="fl pay_box clearfix" data-v-b26926c8>
+                            <div class="pay_item fl clearfix" data-v-b26926c8>
+                                <div class="card fl c_fff" data-v-b26926c8><p class="font_20 font_b" data-v-b26926c8>
+                                    年度会员</p>
+                                    <p class="font_12 mgt10" data-v-b26926c8>有效期为1年（365天）</p></div>
+                                <div class="vip_price fl c_666" data-v-b26926c8><p class="font_20" data-v-b26926c8>
+                                    年度会员</p>
+                                    <p class="font_12 c_999 mgt10" data-v-b26926c8>有效期为1年（365天）</p> <!---->
+                                    <p class="font_20 c_gold vip_time" data-v-b26926c8>￥199/年
+                                        <del class="font_14 c_999" data-v-b26926c8>￥299/年</del>
+                                    </p>
+                                    <button class="vip_btn" v-on:click="bySvip()" data-v-b26926c8>立即购买</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="c_333 font_14 lh30 pdb30 card_box text_bg" data-v-b26926c8><p class="font_20 lh60 mgt10"
+                                                                                              data-v-b26926c8>
+                        会员权益与服务说明</p>
+                        <p data-v-b26926c8>1、会员有效期内可免费学习会员免费课。</p>
+                        <p data-v-b26926c8>2、会员有效期：年度会员有效期为1年（365天）。</p>
+                        <p data-v-b26926c8>
+                            3、会员折扣：会员有效期内，购买学院付费课程可享有对应会员折扣。
+                        </p>
+                        <p data-v-b26926c8>
+                            4、会员到期：自购买之日起，所购会员对应的权益随会员过期自动到期，临近到期您可进行会员续费。
+                        </p>
+                        <p data-v-b26926c8>
+                            5、会员续费：当前会员未到期进行续费的用户，权益和有效期自动顺延。
+                        </p>
+                        <p data-v-b26926c8>
+                            6、会员属于虚拟商品，一经售出，不予退费。
+                        </p>
+                        <p data-v-b26926c8>
+                            7、禁止用户使用任何方式利用本站资源为他人提供有偿服务，一经发现，本站有权查封该账号并追究法律责任。
+                        </p></div>
+                </div> <!---->
+                <div class="i_footer" data-v-b26926c8>
+                    <div class="footer_content clearfix">
+                        <div class="footer_msg">
+                            <ul>
+                                <li class="m_header">关于我们</li>
+                                <li class="m_row"></li>
+                                <li><a href="http://roncoo.com/terrace/1062605655940562946">公司简介</a></li>
+                                <li><a href="http://roncoo.com/terrace/1068157401580552194">联系我们</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer_msg">
+                            <ul>
+                                <li class="m_header">商务合作</li>
+                                <li class="m_row"></li>
+                                <li><a href="http://roncoo.com/terrace/1068157904582459393">课程合作</a></li>
+                                <li><a href="http://roncoo.com/terrace/1068158386537349121">项目合作</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer_msg">
+                            <ul>
+                                <li class="m_header">常见问题</li>
+                                <li class="m_row"></li>
+                                <li><a href="http://roncoo.com/terrace/1068182923547099138">如何支付</a></li>
+                                <li><a href="http://roncoo.com/terrace/1062896590842789889">如何学习</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer_msg">
+                            <ul>
+                                <li class="m_header">联系客服</li>
+                                <li class="m_row"></li>
+                                <li><a href="http://wpa.qq.com/msgrd?y=3&amp;uin=3155237748&amp;site=qq&amp;menu=yes"
+                                       target="_blank">客服QQ：3155237748</a></li>
+                                <li><a href="http://wpa.qq.com/msgrd?y=3&amp;uin=2108067059&amp;site=qq&amp;menu=yes"
+                                       target="_blank">客服QQ：2108067059</a></li> <!----> <!----> <!----></ul>
+                        </div>
+                        <div class="m_right">
+                            <div class="footer_msg">
+                                <ul>
+                                    <li class="m_header">官方微信</li>
+                                    <li><img
+                                            alt></li>
+                                </ul>
+                            </div> <!----></div>
+                    </div> <!---->
+                    <div class="copyright"><span>Copyright &copy; 2015-2019 TTVideo 版权所有</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var menuVu = new Vue({
+        el: "#bd",
+        data: {
+            isLogin: false,
+            user_name: {},
+            user_svip: {},
+            user_uid: {},
+        },
+        mounted() {
+            if ($.cookie("user_name") != '' && $.cookie("user_name") != null) {
+                this.isLogin = true;
+                this.user_name = $.cookie("user_name");
+                this.user_svip = $.cookie("user_svip");
+                this.user_uid = $.cookie("user_uid");
+            }
+            $(".loginRegister spen").hover(function () {
+                this.style.color = "#FFF";
+            }, function () {
+                this.style.color = "#ccc";
+            })
+        },
+        methods: {
+            toLogin: function () {
+                window.open('/login.html', '_blank')
+            },
+            loginOut: function () {
+                if (confirm("您确定退出登录么?")) {
+                    $.cookie('user_name', null, {expires: -1, path: '/'});
+                    $.cookie('user_uid', null, {expires: -1, path: '/'});
+                    $.cookie('user_svip', null, {expires: -1, path: '/'});
+                    alert("注销成功 !");
+                    location.href = "/index.html";
+                }
+            },
+            toPersonal: function () {
+                window.open('/personal.html', '_top');
+            },
+            toIndex: function () {
+                window.open('/index.html', '_top');
+            },
+            bySvip: function () {
+                if (confirm("您确定要购买vip吗?")) {
+                    var data = new FormData();
+                    data.append("uid", $.cookie("user_uid"));
+                    axios.post('/user/bySvip', data)
+                        .then(function (response) {
+                            var result = response.data;
+                            if (result.code == 200) {
+                                alert("购买成功");
+                                $.cookie("user_svip", true, {expires: 1, path: '/'});
+                                this.user_svip = $.cookie("user_svip");
+                            } else {
+                                alert(result.msg)
+                            }
+                        })
+                }
+            }
+        },
+    });
+</script>
+</body>
+</html>
