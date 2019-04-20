@@ -1,5 +1,8 @@
 package com.xawl.ttvideo.pojo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.xawl.ttvideo.utils.CustomDateSerializer;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -142,7 +145,7 @@ public class User {
         this.phone = phone;
     }
 
-
+    @JsonSerialize(using = CustomDateSerializer.class)
     public Date getIntime() {
         return intime;
     }

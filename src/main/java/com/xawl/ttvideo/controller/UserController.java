@@ -3,8 +3,12 @@ package com.xawl.ttvideo.controller;
 import com.xawl.ttvideo.pojo.Result;
 import com.xawl.ttvideo.pojo.User;
 import com.xawl.ttvideo.service.UserService;
+import com.xawl.ttvideo.utils.PageInfo;
+import com.xawl.ttvideo.utils.PageUtils;
 import com.xawl.ttvideo.utils.UserBased;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,18 +45,34 @@ public class UserController {
         if (obj != null) {
             return Result.success(401, "账号已经被注册了!");
         } else {
-            user.setBalence(0D);
-            user.setAge(0);
-            user.setIntime(new Date());
-            user.setImg("images/touxiang/1.jpg");
-            user.setIsvip(false);
-            user.setFirstlogin(true);
-            user.setGender(1);
-            user.setUid(null);
-            user.setName("新用戶" + user.getAccount());
             service.add(user);
             return Result.success(200, "注册成功", user);
         }
+    }
+
+    @PostMapping("/add")
+    public Result add(User user) {
+        User obj = service.findByAccount(user.getAccount());
+        if (obj != null) {
+            return Result.success(401, "账号已经被注册了!");
+        } else {
+            init(user);
+            service.add(user);
+            return Result.success(200, "注册成功", user);
+        }
+    }
+
+    private User init(User user) {
+        user.setBalence(0D);
+        user.setAge(0);
+        user.setIntime(new Date());
+        user.setImg("images/touxiang/1.jpg");
+        user.setIsvip(false);
+        user.setFirstlogin(true);
+        user.setGender(1);
+        user.setUid(null);
+        user.setName("新用戶" + user.getAccount());
+        return user;
     }
 
     @PostMapping("/pingfen")
@@ -65,6 +85,12 @@ public class UserController {
         }
     }
 
+    @PostMapping("/update")
+    public Result update(User user) {
+        service.update(user);
+        return Result.success(null);
+    }
+
     @PostMapping("/bySvip")
     public Result bySvip(Integer uid) {
         boolean b = service.bySvip(uid);
@@ -73,5 +99,29 @@ public class UserController {
         } else {
             return Result.err(401, "购买失败");
         }
+    }
+
+    @GetMapping("findAll")
+    public Result findAll(Boolean selectAll, Integer page, User user) {
+        System.out.println(user);
+        if (selectAll != null) {
+            return Result.success(service.findAll());
+        } else {
+            Page<User> all = service.findAll(--page, user);
+            PageInfo<User> pageInfo = new PageUtils<User>().getPageInfo(all);
+            return Result.success(pageInfo);
+        }
+    }
+
+    @GetMapping("delete")
+    public Result delete(User user) {
+        service.deleteById(user);
+        return Result.success(null);
+    }
+
+    @GetMapping("rePass")
+    public Result rePass(User user) {
+        service.rePass(user);
+        return Result.success(null);
     }
 }

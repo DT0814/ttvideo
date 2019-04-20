@@ -69,6 +69,6 @@ public class AdminService {
     public void rePass(Integer aid) {
         Admin byAid = findByAid(aid);
         byAid.setPass(byAid.getAccount());
-        Admin admin = dao.saveAndFlush(byAid);
+        dao.saveAndFlush(byAid);
     }
 }
