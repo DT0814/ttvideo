@@ -62,7 +62,7 @@ public class ResourceService {
         Resources resources = new Resources();
         resources.setCid(cid);
         Example<Resources> example = Example.of(resources, exampleMatcher);
-        Sort sort = new Sort(Sort.Direction.ASC, "rank");
+        Sort sort = Sort.by(Sort.Direction.ASC, "rank");
         List<Resources> all = dao.findAll(example, sort);
         return all;
     }

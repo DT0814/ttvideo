@@ -53,7 +53,7 @@ public class UserService {
     }
 
     public Page<User> findAll(Integer pageNumber, User user) {
-        Sort sort = new Sort(Sort.Direction.DESC, "uid");
+        Sort sort = Sort.by(Sort.Direction.DESC, "uid");
         Pageable pageable = PageRequest.of(pageNumber, 8, sort);
         Example<User> example = Example.of(user, ExampleMatcher.matching());
         Page<User> all = dao.findAll(example, pageable);

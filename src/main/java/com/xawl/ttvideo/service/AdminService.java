@@ -36,7 +36,7 @@ public class AdminService {
     }
 
     public Page<Admin> findAll(Integer pageNumber, Admin admin) {
-        Sort sort = new Sort(Sort.Direction.DESC, "aid");
+        Sort sort = Sort.by(Sort.Direction.DESC, "aid");
         Pageable pageable = PageRequest.of(pageNumber, 8, sort);
         Example<Admin> example = Example.of(admin, ExampleMatcher.matching());
         Page<Admin> all = dao.findAll(example, pageable);

@@ -84,7 +84,7 @@ public class CourseService {
     }
 
     public Page<Course> findAll(Integer pageNumber, Course course) {
-        Sort sort = new Sort(Sort.Direction.DESC, "cid");
+        Sort sort = Sort.by(Sort.Direction.DESC, "cid");
         Pageable pageable = PageRequest.of(pageNumber, 8, sort);
         Example<Course> example = Example.of(course, ExampleMatcher.matching());
         Page<Course> all = dao.findAll(example, pageable);
@@ -92,13 +92,13 @@ public class CourseService {
     }
 
     public List<Course> findExcellentCourse() {
-        Pageable pageable = PageRequest.of(0, 16, new Sort(Sort.Direction.DESC, "clickNum"));
+        Pageable pageable = PageRequest.of(0, 16, Sort.by(Sort.Direction.DESC, "clickNum"));
         Page<Course> all = dao.findAll(pageable);
         return all.getContent();
     }
 
     public List<Course> newCourse() {
-        Pageable pageable = PageRequest.of(0, 16, new Sort(Sort.Direction.DESC, "intime"));
+        Pageable pageable = PageRequest.of(0, 16, Sort.by(Sort.Direction.DESC, "intime"));
         Page<Course> all = dao.findAll(pageable);
         return all.getContent();
     }
@@ -106,7 +106,7 @@ public class CourseService {
     public List<Course> findBycaid(Integer caid) {
         Course course = new Course();
         course.setCaid(caid);
-        Pageable pageable = PageRequest.of(0, 16, new Sort(Sort.Direction.DESC, "intime"));
+        Pageable pageable = PageRequest.of(0, 16, Sort.by(Sort.Direction.DESC, "intime"));
         Page<Course> all = dao.findAll(Example.of(course), pageable);
         return all.getContent();
     }
@@ -156,7 +156,7 @@ public class CourseService {
                 }
             }
         }
-        pageable = PageRequest.of(0, 6, new Sort(Sort.Direction.DESC, "clickNum"));
+        pageable = PageRequest.of(0, 6, Sort.by(Sort.Direction.DESC, "clickNum"));
         Page<Course> all = dao.findAll(Example.of(course), pageable);
         list.addAll(all.getContent());
         distinct(list);

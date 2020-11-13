@@ -25,7 +25,7 @@ public class TeacherService {
     }
 
     public Page<Teacher> findAll(Integer pageNumber, Teacher teacher) {
-        Sort sort = new Sort(Sort.Direction.DESC, "tid");
+        Sort sort = Sort.by(Sort.Direction.DESC, "tid");
         Pageable pageable = PageRequest.of(pageNumber, 8, sort);
         Example<Teacher> example = Example.of(teacher, ExampleMatcher.matching());
         Page<Teacher> all = dao.findAll(example, pageable);

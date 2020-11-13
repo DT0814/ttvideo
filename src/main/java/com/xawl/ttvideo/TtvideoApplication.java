@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.util.unit.DataSize;
 
 import javax.servlet.MultipartConfigElement;
 
@@ -18,8 +19,8 @@ public class TtvideoApplication {
     @Bean
     public MultipartConfigElement multipartConfigElement(@Value("${multipart.maxFileSize}") String maxFileSize, @Value("${multipart.maxRequestSize}") String maxRequestSize) {
         MultipartConfigFactory factory = new MultipartConfigFactory();
-        factory.setMaxFileSize(maxFileSize);
-        factory.setMaxRequestSize(maxRequestSize);
+        factory.setMaxFileSize(DataSize.parse(maxFileSize));
+        factory.setMaxRequestSize(DataSize.parse(maxRequestSize));
         return factory.createMultipartConfig();
     }
 }
