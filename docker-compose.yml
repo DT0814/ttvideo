@@ -1,0 +1,33 @@
+version : '3'
+services:
+
+  ttvideo:
+    container_name: ttvideo
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - .:/vol/development
+    depends_on:
+      - mysql
+    links:
+      - "mysql:mysql"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/video?autoReconnect=true&useSSL=false
+  mysql:
+    container_name: mysql-compose
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    command: [
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci',
+      '--default-time-zone=+8:00'
+    ]
+    environment:
+      MYSQL_DATABASE: video
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+    restart: always
