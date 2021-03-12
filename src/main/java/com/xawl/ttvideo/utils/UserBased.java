@@ -6,6 +6,7 @@ import org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;
 import org.apache.mahout.cf.taste.impl.model.file.*;
 import org.apache.mahout.cf.taste.impl.neighborhood.*;
 import org.apache.mahout.cf.taste.impl.recommender.*;
+import org.apache.mahout.cf.taste.impl.recommender.slopeone.SlopeOneRecommender;
 import org.apache.mahout.cf.taste.impl.similarity.*;
 import org.apache.mahout.cf.taste.model.*;
 import org.apache.mahout.cf.taste.recommender.*;
