@@ -1,5 +1,4 @@
 FROM java:8
 VOLUME /temp
-ADD  ttvideo-0.0.2-SNAPSHOT.jar ttvideo-0.0.2-SNAPSHOT.jar
-RUN bash -c 'touch /ttvideo-0.0.2-SNAPSHOT.jar'
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","-Xmx1024m","-Xms1024m","/ttvideo-0.0.2-SNAPSHOT.jar"]
+COPY ttvideo-0.0.2-SNAPSHOT.jar ttvideo.jar
+ENTRYPOINT [ "java","-agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=n","-Djava.security.egd=file:/dev/./urandom","-jar","/ttvideo.jar" ]

@@ -7,8 +7,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
-    volumes:
-      - .:/vol/development
     depends_on:
       - mysql
     links:
