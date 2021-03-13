@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.Date;
@@ -25,13 +26,13 @@ public class ResourcesController {
     private ResourceService service;
 
     @RequestMapping("add")
-    public Result add(MultipartFile resourceFile, MultipartFile coursewareFile, Resources resources) {
+    public Result add(MultipartFile resourceFile, MultipartFile coursewareFile, Resources resources, HttpServletRequest request) {
         try {
             if (null != resourceFile && resourceFile.getSize() != 0) {
                 try {
-                    resources.setUrl(ResourceUtils.upload(resourceFile, uploadPath));
+                    resources.setUrl(ResourceUtils.upload(resourceFile, uploadPath,request));
                     if (null != coursewareFile && coursewareFile.getSize() != 0) {
-                        resources.setCoursewareUrl(ResourceUtils.upload(coursewareFile, uploadPath));
+                        resources.setCoursewareUrl(ResourceUtils.upload(coursewareFile, uploadPath,request));
                         resources.setHaveCourseware(1);
                     } else {
                         resources.setHaveCourseware(0);
@@ -54,10 +55,10 @@ public class ResourcesController {
     }
 
     @RequestMapping("delete")
-    public Result delete(Integer rid, String url) {
+    public Result delete(Integer rid, String url,HttpServletRequest request) {
         try {
             service.delete(rid);
-            ResourceUtils.deleteResource(url);
+            ResourceUtils.deleteResource(url,request);
             return Result.success(200, "", null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,11 +68,11 @@ public class ResourcesController {
     }
 
     @RequestMapping("update")
-    public Result update(Resources resources, MultipartFile resourceFile, MultipartFile coursewareFile) {
+    public Result update(Resources resources, MultipartFile resourceFile, MultipartFile coursewareFile,HttpServletRequest request) {
         if (null != resourceFile && resourceFile.getSize() != 0) {
             try {
-                ResourceUtils.deleteResource(resources.getUrl());
-                resources.setUrl(ResourceUtils.upload(resourceFile, uploadPath));
+                ResourceUtils.deleteResource(resources.getUrl(),request);
+                resources.setUrl(ResourceUtils.upload(resourceFile, uploadPath,request));
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -80,8 +81,8 @@ public class ResourcesController {
         }
         if (null != coursewareFile && coursewareFile.getSize() != 0) {
             try {
-                ResourceUtils.deleteResource(resources.getCoursewareUrl());
-                resources.setCoursewareUrl(ResourceUtils.upload(coursewareFile, uploadPath));
+                ResourceUtils.deleteResource(resources.getCoursewareUrl(),request);
+                resources.setCoursewareUrl(ResourceUtils.upload(coursewareFile, uploadPath,request));
             } catch (IOException e) {
                 e.printStackTrace();
                 return Result.err(301, "更新文件出错");
@@ -99,10 +100,11 @@ public class ResourcesController {
     }
 
     @RequestMapping("/download")
-    private String download(HttpServletResponse response, Integer rid) throws UnsupportedEncodingException {
+    private String download(HttpServletResponse response, Integer rid,HttpServletRequest request) throws UnsupportedEncodingException {
         Resources res = service.getOneById(rid);
-        String aStatic = ClassUtils.getDefaultClassLoader().getResource("static").getPath();
-        File file = new File(aStatic + "/" + res.getCoursewareUrl().substring(3));
+        String destPath = request.getSession().getServletContext().getRealPath("") + File.separator;
+
+        File file = new File(destPath + "/" + res.getCoursewareUrl().substring(6));
         String fileName = res.getRname() + res.getCoursewareUrl().substring(res.getCoursewareUrl().lastIndexOf("."));
         fileName = new String(fileName.getBytes("GBK"), "ISO-8859-1");
         System.out.println(fileName);

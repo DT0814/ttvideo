@@ -3,14 +3,24 @@ package com.xawl.ttvideo.service;
 import com.xawl.ttvideo.dao.CourseDao;
 import com.xawl.ttvideo.dao.UserRecommendDao;
 import com.xawl.ttvideo.pojo.Course;
-import com.xawl.ttvideo.pojo.Result;
 import com.xawl.ttvideo.pojo.UserRecommend;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CourseService {
@@ -160,7 +170,7 @@ public class CourseService {
         Page<Course> all = dao.findAll(Example.of(course), pageable);
         list.addAll(all.getContent());
         distinct(list);
-        return list.subList(0, 6);
+        return list.size() > 6 ? list.subList(0, 6) : list;
     }
 
     public Course findCourseByCid(Integer cid) {

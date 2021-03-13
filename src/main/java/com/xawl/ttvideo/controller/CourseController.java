@@ -38,11 +38,11 @@ public class CourseController {
     private final static String uploadPath = "images/";
 
     @RequestMapping("add")
-    public Result add(MultipartFile file, Course course) {
+    public Result add(MultipartFile file, Course course,HttpServletRequest request) {
         try {
             if (null != file && file.getSize() != 0) {
                 try {
-                    course.setImg(ResourceUtils.upload(file, uploadPath));
+                    course.setImg(ResourceUtils.upload(file, uploadPath,request));
                     course.setIntime(new Date());
                     course.setTname(teacherService.findTnameBuyTid(course.getTid()));
                     course.setCaname(catalogService.findCanameBycaid(course.getCaid()));
@@ -65,10 +65,10 @@ public class CourseController {
     }
 
     @RequestMapping("delete")
-    public Result delete(Integer cid, String img) {
+    public Result delete(Integer cid, String img,HttpServletRequest request) {
         try {
             service.delete(cid);
-            ResourceUtils.deleteResource(img);
+            ResourceUtils.deleteResource(img,request);
             return Result.success(200, "");
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,11 +78,11 @@ public class CourseController {
     }
 
     @RequestMapping("update")
-    public Result update(Course course, MultipartFile file) {
+    public Result update(Course course, MultipartFile file,HttpServletRequest request) {
         if (null != file && file.getSize() != 0) {
             try {
-                ResourceUtils.deleteResource(course.getImg());
-                course.setImg(ResourceUtils.upload(file, uploadPath));
+                ResourceUtils.deleteResource(course.getImg(),request);
+                course.setImg(ResourceUtils.upload(file, uploadPath,request));
             } catch (IOException e) {
                 e.printStackTrace();
                 return Result.err(301, "上传课程图片出错");

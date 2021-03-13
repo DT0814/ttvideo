@@ -9,6 +9,7 @@ import com.xawl.ttvideo.utils.UserBased;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,7 +46,7 @@ public class UserController {
         if (obj != null) {
             return Result.success(401, "账号已经被注册了!");
         } else {
-            service.add(user);
+            service.add(init(user));
             return Result.success(200, "注册成功", user);
         }
     }
@@ -56,8 +57,7 @@ public class UserController {
         if (obj != null) {
             return Result.success(401, "账号已经被注册了!");
         } else {
-            init(user);
-            service.add(user);
+            service.add(init(user));
             return Result.success(200, "注册成功", user);
         }
     }
@@ -101,6 +101,18 @@ public class UserController {
         }
     }
 
+    @PostMapping("/updatePass/{uid}")
+    public Result updatePass(@PathVariable Integer uid, String newPass, String pass) {
+        User byUid = service.findByUid(uid);
+        if (!pass.equals(byUid.getPass())) {
+            return Result.err(401, "旧密码错误");
+        }
+        byUid.setPass(newPass);
+        service.update(byUid);
+        return Result.success(null);
+
+    }
+
     @GetMapping("findAll")
     public Result findAll(Boolean selectAll, Integer page, User user) {
         System.out.println(user);
@@ -111,6 +123,12 @@ public class UserController {
             PageInfo<User> pageInfo = new PageUtils<User>().getPageInfo(all);
             return Result.success(pageInfo);
         }
+    }
+
+    @GetMapping("/{user_id}")
+    public Result findAll(@PathVariable Integer user_id) {
+        System.out.println(user_id);
+        return Result.success(service.findByUid(user_id));
     }
 
     @GetMapping("delete")

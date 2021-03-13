@@ -1,5 +1,7 @@
 server:
   port: 80
+  tomcat:
+    basedir: /tmp/ttvideo
 spring:
       datasource:
           driver-class-name: com.mysql.cj.jdbc.Driver
