@@ -10,9 +10,8 @@
     </parent>
     <groupId>com.xawl</groupId>
     <artifactId>ttvideo</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>ttvideo</name>
-    <description></description>
 
     <properties>
         <java.version>1.8</java.version>
